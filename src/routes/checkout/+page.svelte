@@ -47,7 +47,7 @@
 	<title>Checkout — Shoemate</title>
 </svelte:head>
 
-<section class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+<section class="pt-8">
 	{#if orderNo}
 		<div class="mx-auto max-w-lg rounded-[2rem] bg-white px-6 py-12 text-center shadow-card sm:px-10">
 			<span class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">

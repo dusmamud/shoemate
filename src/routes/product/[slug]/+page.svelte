@@ -48,7 +48,7 @@
 </svelte:head>
 
 {#if product}
-	<section class="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
+	<section class="pt-6">
 		<nav aria-label="Breadcrumb" class="text-[13px] text-ink-soft">
 			<a href="/" class="hover:text-brand-600">Home</a> <span aria-hidden="true">/</span>
 			<a href="/shop" class="hover:text-brand-600">Shop</a> <span aria-hidden="true">/</span>
@@ -214,7 +214,7 @@
 		</section>
 	</section>
 {:else}
-	<section class="mx-auto max-w-7xl px-4 pt-20 pb-10 text-center sm:px-6">
+	<section class="pt-20 pb-10 text-center">
 		<h1 class="text-3xl font-extrabold">Product not found</h1>
 		<p class="mt-2 text-ink-soft">That pair may have sold out or moved. Browse the latest drops instead.</p>
 		<a href="/shop" class="mt-6 inline-flex h-12 items-center gap-2 rounded-full bg-ink px-7 text-sm font-semibold text-white hover:bg-brand-500">

@@ -20,7 +20,7 @@
 	<meta name="description" content="Sneaker deals at Shoemate: up to 30% off bestsellers plus an extra 10% with code SHOEMATE10." />
 </svelte:head>
 
-<section class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+<section class="pt-8">
 	<Reveal>
 		<div class="overflow-hidden rounded-[2rem] bg-ink px-6 py-10 text-white sm:px-10">
 			<p class="inline-flex items-center gap-1.5 rounded-full bg-brand-500 px-3 py-1 text-xs font-bold tracking-widest uppercase">

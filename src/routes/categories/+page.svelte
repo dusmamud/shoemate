@@ -11,7 +11,7 @@
 	<meta name="description" content="Browse sneaker categories at Shoemate: premium sneakers, top picks, bestsellers and fresh drops." />
 </svelte:head>
 
-<section class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+<section class="pt-8">
 	<Reveal>
 		<p class="text-sm font-semibold tracking-widest text-brand-500 uppercase">Categories</p>
 		<h1 class="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">Find your lane</h1>

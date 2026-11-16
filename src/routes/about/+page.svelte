@@ -28,7 +28,7 @@
 	<meta name="description" content="Shoemate started with one belief: great sneakers should be easy to buy. Read our story." />
 </svelte:head>
 
-<section class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+<section class="pt-8">
 	<Reveal>
 		<p class="text-sm font-semibold tracking-widest text-brand-500 uppercase">About</p>
 		<h1 class="mt-1 max-w-2xl text-3xl leading-tight font-extrabold tracking-tight text-balance sm:text-5xl">

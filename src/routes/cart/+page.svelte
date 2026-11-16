@@ -25,7 +25,7 @@
 	<title>Your Cart — Shoemate</title>
 </svelte:head>
 
-<section class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+<section class="pt-8">
 	<h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Your Cart</h1>
 	<p class="mt-1 text-[15px] text-ink-soft">{cart.count} item{cart.count === 1 ? '' : 's'} · Free shipping over $150</p>
 

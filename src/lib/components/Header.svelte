@@ -24,8 +24,9 @@
 	});
 </script>
 
-<header class="sticky top-0 z-40 border-b border-line/70 bg-white/90 backdrop-blur-md">
-	<div class="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:h-[72px] sm:px-6 lg:px-8">
+<!-- Header lives INSIDE the white sheet (no separate bar, no bottom border). -->
+<header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md">
+	<div class="flex h-16 items-center gap-3 px-4 sm:h-[72px] sm:px-6 lg:px-8">
 		<a href="/" class="flex shrink-0 items-center" aria-label="Shoemate home">
 			<span class="flex h-10 w-10 items-center justify-center rounded-xl bg-ink text-white">
 				<Sneaker size={24} weight="fill" />

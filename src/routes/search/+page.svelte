@@ -15,7 +15,7 @@
 	<title>{q ? `Search: ${q}` : 'Search'} — Shoemate</title>
 </svelte:head>
 
-<section class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+<section class="pt-8">
 	<p class="text-sm font-semibold tracking-widest text-brand-500 uppercase">Search</p>
 	<h1 class="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">
 		{#if q}Results for “{q}”{:else}Search sneakers{/if}

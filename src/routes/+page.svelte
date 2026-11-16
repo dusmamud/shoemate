@@ -69,12 +69,13 @@
 </svelte:head>
 
 <!-- ============ HERO ============ -->
-<section class="relative mx-auto max-w-7xl px-4 pt-6 sm:px-6 sm:pt-10 lg:px-8">
-	<div class="relative overflow-hidden rounded-[2rem] bg-white px-4 py-10 shadow-card sm:px-8 sm:py-14">
-		<span aria-hidden="true" class="text-outline-year pointer-events-none absolute top-1/2 right-0 hidden translate-x-[22%] -translate-y-1/2 text-[10.5rem] leading-none font-extrabold tracking-tighter select-none [writing-mode:vertical-rl] xl:block">
-			2026
-		</span>
+<!-- Hero sits directly on the white sheet — no separate card (the reference has none). -->
+<section class="relative -mx-4 overflow-hidden pt-6 sm:-mx-6 sm:pt-10 lg:-mx-8">
+	<span aria-hidden="true" class="text-outline-year pointer-events-none absolute top-1/2 right-0 hidden translate-x-[22%] -translate-y-1/2 text-[10.5rem] leading-none font-extrabold tracking-tighter select-none [writing-mode:vertical-rl] xl:block">
+		2026
+	</span>
 
+	<div class="relative px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
 		<div class="relative text-center">
 			<p class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-500 sm:text-base">
 				<Fire size={19} weight="fill" /> Summer Collection 2026
@@ -139,7 +140,7 @@
 </section>
 
 <!-- ============ BRAND MARQUEE ============ -->
-<section aria-label="Brands we carry" class="mt-10 overflow-hidden border-y border-line/70 bg-white/60 py-4">
+<section aria-label="Brands we carry" class="-mx-4 mt-10 overflow-hidden border-y border-line/70 bg-white/60 py-4 sm:-mx-6 lg:-mx-8">
 	<div class="animate-marquee flex w-max items-center gap-10 whitespace-nowrap">
 		{#each [...brands, ...brands] as brand}
 			<span class="flex items-center gap-10 text-sm font-bold tracking-[0.22em] text-ink/40 uppercase">
@@ -150,7 +151,7 @@
 </section>
 
 <!-- ============ CATEGORIES ============ -->
-<section class="mx-auto max-w-7xl px-4 pt-14 sm:px-6 lg:px-8">
+<section class="pt-14">
 	<Reveal>
 		<h2 class="text-xl font-extrabold tracking-tight uppercase sm:text-2xl">Our Categories</h2>
 	</Reveal>
@@ -233,7 +234,7 @@
 </section>
 
 <!-- ============ LATEST PRODUCTS ============ -->
-<section class="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
+<section class="pt-16">
 	<Reveal>
 		<div class="flex items-end justify-between gap-4">
 			<h2 class="text-xl font-extrabold tracking-tight uppercase sm:text-2xl">Latest Products</h2>
@@ -252,7 +253,7 @@
 </section>
 
 <!-- ============ DEALS BANNER ============ -->
-<section class="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
+<section class="pt-16">
 	<Reveal>
 		<div class="relative overflow-hidden rounded-[2rem] bg-ink px-6 py-10 text-white sm:px-10 lg:px-14">
 			<div aria-hidden="true" class="hero-glow absolute -top-24 -right-24 h-96 w-96 rounded-full opacity-70 blur-3xl"></div>
@@ -297,7 +298,7 @@
 </section>
 
 <!-- ============ BESTSELLERS ============ -->
-<section class="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
+<section class="pt-16">
 	<Reveal>
 		<div class="flex items-end justify-between gap-4">
 			<h2 class="text-xl font-extrabold tracking-tight uppercase sm:text-2xl">Bestsellers</h2>
@@ -316,11 +317,11 @@
 </section>
 
 <!-- ============ WHY SHOEMATE ============ -->
-<section class="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
+<section class="pt-16">
 	<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 		{#each features as [Icon, title, text], i}
 			<Reveal delay={i * 60}>
-				<div class="h-full rounded-3xl bg-white p-6 shadow-card transition-all hover:-translate-y-1 hover:shadow-lift">
+				<div class="h-full rounded-3xl bg-mist p-6 shadow-card transition-all hover:-translate-y-1 hover:shadow-lift">
 					<span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-500">
 						<Icon size={24} weight="duotone" />
 					</span>
@@ -333,14 +334,14 @@
 </section>
 
 <!-- ============ TESTIMONIALS ============ -->
-<section class="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
+<section class="pt-16">
 	<Reveal>
 		<h2 class="text-xl font-extrabold tracking-tight uppercase sm:text-2xl">Loved by 15,000+ sneakerheads</h2>
 	</Reveal>
 	<div class="mt-6 grid gap-4 md:grid-cols-3">
 		{#each testimonials as t, i}
 			<Reveal delay={i * 70}>
-				<figure class="flex h-full flex-col rounded-3xl bg-white p-6 shadow-card">
+				<figure class="flex h-full flex-col rounded-3xl bg-mist p-6 shadow-card">
 					<div class="flex gap-0.5" aria-label="Rated {t.rating} out of 5">
 						{#each Array(t.rating) as _}
 							<Star size={17} weight="fill" class="text-amber-400" />
@@ -358,7 +359,7 @@
 </section>
 
 <!-- ============ NEWSLETTER ============ -->
-<section class="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
+<section class="pt-16">
 	<Reveal>
 		<div class="rounded-[2rem] bg-brand-500 px-6 py-10 text-center text-white sm:px-10">
 			<h2 class="text-2xl font-extrabold text-balance sm:text-3xl">Get 10% off your first order</h2>

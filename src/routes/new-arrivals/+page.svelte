@@ -12,7 +12,7 @@
 	<meta name="description" content="The freshest sneaker drops at Shoemate. New arrivals, updated weekly." />
 </svelte:head>
 
-<section class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+<section class="pt-8">
 	<Reveal>
 		<p class="text-sm font-semibold tracking-widest text-brand-500 uppercase">Just landed</p>
 		<h1 class="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">New Arrivals</h1>
