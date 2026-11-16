@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { Heart, List, MagnifyingGlass, ShoppingBag, Sneaker, User, X } from 'phosphor-svelte';
-	import { cart, ui, wishlist } from '#lib/store.svelte';
+	import { List, MagnifyingGlass, ShoppingBag, Sneaker, User, X } from 'phosphor-svelte';
+	import { cart, ui } from '#lib/store.svelte';
 
 	const links = [
 		{ href: '/', label: 'Home' },
@@ -26,12 +26,9 @@
 
 <header class="sticky top-0 z-40 border-b border-line/70 bg-white/90 backdrop-blur-md">
 	<div class="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:h-[72px] sm:px-6 lg:px-8">
-		<a href="/" class="flex shrink-0 items-center gap-2" aria-label="Shoemate home">
+		<a href="/" class="flex shrink-0 items-center" aria-label="Shoemate home">
 			<span class="flex h-10 w-10 items-center justify-center rounded-xl bg-ink text-white">
 				<Sneaker size={24} weight="fill" />
-			</span>
-			<span class="text-lg font-extrabold tracking-tight sm:text-xl">
-				SHOE<span class="text-brand-500">MATE</span>
 			</span>
 		</a>
 
@@ -41,7 +38,7 @@
 					href={link.href}
 					aria-current={isActive(link.href) ? 'page' : undefined}
 					class="rounded-full px-3.5 py-2 text-sm font-medium transition-colors {isActive(link.href)
-						? 'bg-brand-50 font-semibold text-brand-600'
+						? 'font-semibold text-brand-600'
 						: 'text-ink hover:bg-mist hover:text-ink'}"
 				>
 					{link.label}
@@ -57,7 +54,7 @@
 				aria-label="Search products"
 			>
 				<MagnifyingGlass size={18} />
-				<span class="hidden xl:inline">Search products…</span>
+				<span class="hidden xl:inline">Search Products...</span>
 			</button>
 			<button
 				type="button"
@@ -74,19 +71,6 @@
 			>
 				<User size={19} />
 				<span class="hidden md:inline">Sign in</span>
-			</a>
-
-			<a
-				href="/cart"
-				class="relative flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-mist"
-				aria-label="Wishlist, {wishlist.slugs.length} items"
-			>
-				<Heart size={20} weight={wishlist.slugs.length ? 'fill' : 'regular'} class={wishlist.slugs.length ? 'text-brand-500' : ''} />
-				{#if wishlist.slugs.length}
-					<span class="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-500 px-1 text-[10px] font-bold text-white">
-						{wishlist.slugs.length}
-					</span>
-				{/if}
 			</a>
 
 			<button

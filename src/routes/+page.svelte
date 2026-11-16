@@ -71,7 +71,7 @@
 <!-- ============ HERO ============ -->
 <section class="relative mx-auto max-w-7xl px-4 pt-6 sm:px-6 sm:pt-10 lg:px-8">
 	<div class="relative overflow-hidden rounded-[2rem] bg-white px-4 py-10 shadow-card sm:px-8 sm:py-14">
-		<span aria-hidden="true" class="text-outline-year pointer-events-none absolute top-3 right-3 hidden text-[6.5rem] leading-[1.05] font-extrabold tracking-tighter select-none [writing-mode:vertical-rl] xl:block">
+		<span aria-hidden="true" class="text-outline-year pointer-events-none absolute top-1/2 right-0 hidden translate-x-[22%] -translate-y-1/2 text-[10.5rem] leading-none font-extrabold tracking-tighter select-none [writing-mode:vertical-rl] xl:block">
 			2026
 		</span>
 
@@ -89,7 +89,7 @@
 				<p class="text-[15px] leading-relaxed text-ink-soft">
 					Shop the latest arrivals with fast delivery and exclusive offers.
 				</p>
-				<div class="mt-6 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+				<div class="mt-6 flex flex-col items-center gap-3 lg:items-start">
 					<a
 						href="/shop"
 						class="flex h-12 items-center gap-2 rounded-full bg-brand-500 px-6 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 transition-all hover:-translate-y-0.5 hover:bg-brand-600"
@@ -106,12 +106,12 @@
 			</div>
 
 			<div class="relative order-1 lg:order-2">
-				<div aria-hidden="true" class="hero-glow absolute inset-x-8 top-1/2 aspect-[4/3] -translate-y-1/2 rounded-full blur-2xl sm:inset-x-16"></div>
+				<div aria-hidden="true" class="hero-glow absolute top-1/2 left-1/2 aspect-square w-[min(92%,560px)] -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"></div>
 				<img
 					src={heroProduct.image}
 					alt="Velocity Runner X1 — white and grey sneaker with a bright orange sole"
-					width="1920"
-					height="1280"
+					width="1422"
+					height="1011"
 					fetchpriority="high"
 					class="animate-float relative mx-auto w-full max-w-[560px] drop-shadow-[0_28px_28px_rgb(22_19_15/0.18)]"
 				/>
@@ -152,12 +152,7 @@
 <!-- ============ CATEGORIES ============ -->
 <section class="mx-auto max-w-7xl px-4 pt-14 sm:px-6 lg:px-8">
 	<Reveal>
-		<div class="flex items-end justify-between gap-4">
-			<h2 class="text-xl font-extrabold tracking-tight uppercase sm:text-2xl">Our Categories</h2>
-			<a href="/categories" class="hidden items-center gap-1.5 text-sm font-semibold text-ink-soft transition-colors hover:text-brand-600 sm:inline-flex">
-				View all <ArrowRight size={16} weight="bold" />
-			</a>
-		</div>
+		<h2 class="text-xl font-extrabold tracking-tight uppercase sm:text-2xl">Our Categories</h2>
 	</Reveal>
 
 	<div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -175,11 +170,14 @@
 					height="1792"
 					class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
 				/>
-				<span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent p-5 pt-20 text-white">
+				<span
+					class="absolute inset-x-0 bottom-0 p-5 pt-16 text-ink"
+					style="background: linear-gradient(to top, {categories[0].bg}, {categories[0].bg} 55%, transparent)"
+				>
 					<span class="text-xl font-bold">{categories[0].name}</span>
-					<span class="mt-0.5 block text-sm text-white/80">{categories[0].tagline}</span>
-					<span class="mt-3 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[13px] font-semibold text-ink transition-colors group-hover:bg-brand-500 group-hover:text-white">
-						{categories[0].cta} <ArrowRight size={15} weight="bold" />
+					<span class="mt-0.5 block text-sm text-ink-soft">{categories[0].tagline}</span>
+					<span class="mt-3 inline-flex items-center rounded-full bg-white px-4 py-2 text-[13px] font-semibold text-ink shadow-sm transition-colors group-hover:bg-brand-500 group-hover:text-white">
+						{categories[0].cta}
 					</span>
 				</span>
 			</a>
@@ -199,10 +197,9 @@
 					height="1152"
 					class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
 				/>
-				<span aria-hidden="true" class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/55 via-black/20 to-transparent"></span>
-				<span class="absolute right-0 bottom-0 p-5 text-right text-white drop-shadow">
+				<span class="absolute top-1/2 right-0 -translate-y-1/2 p-6 text-right text-white drop-shadow-md sm:p-8">
 					<span class="text-lg font-bold sm:text-xl">{categories[1].name}</span>
-					<span class="mt-0.5 block text-sm text-white/85">{categories[1].tagline} →</span>
+					<span class="mt-0.5 block text-sm text-white/85">{categories[1].tagline}</span>
 				</span>
 			</a>
 		</Reveal>
@@ -211,7 +208,7 @@
 			<Reveal delay={120 + i * 60}>
 				<a
 					href="/categories"
-					class="group relative block h-full min-h-[220px] overflow-hidden rounded-3xl shadow-card transition-shadow hover:shadow-lift"
+					class="group relative block h-full min-h-[220px] overflow-hidden rounded-3xl shadow-card transition-shadow hover:shadow-lift lg:min-h-[272px]"
 					style="background: {cat.bg}"
 				>
 					<img
@@ -222,9 +219,12 @@
 						height="1600"
 						class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
 					/>
-					<span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent p-5 pt-14 text-white">
+					<span
+						class="absolute inset-x-0 bottom-0 p-5 pt-14 text-ink"
+						style="background: linear-gradient(to top, {cat.bg}, {cat.bg} 55%, transparent)"
+					>
 						<span class="text-lg font-bold">{cat.name}</span>
-						<span class="mt-0.5 block text-sm text-white/85">{cat.tagline} →</span>
+						<span class="mt-0.5 block text-sm text-ink-soft">{cat.tagline}</span>
 					</span>
 				</a>
 			</Reveal>

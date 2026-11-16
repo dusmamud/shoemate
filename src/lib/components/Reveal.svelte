@@ -11,6 +11,18 @@
 
 	$effect(() => {
 		if (!el) return;
+		// No observer (old browser / failed JS): stay visible, never hide.
+		if (!('IntersectionObserver' in window)) {
+			el.classList.add('is-visible');
+			return;
+		}
+		// Already (almost) in view on load: show immediately.
+		if (el.getBoundingClientRect().top < window.innerHeight * 0.92) {
+			el.classList.add('is-visible');
+			return;
+		}
+		// Below the fold: arm the hidden state, reveal on scroll-in.
+		el.classList.add('reveal-armed');
 		const io = new IntersectionObserver(
 			(entries) => {
 				for (const entry of entries) {

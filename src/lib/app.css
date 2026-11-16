@@ -56,14 +56,21 @@
 	}
 }
 
-/* Scroll reveal: hidden until the observer adds .is-visible */
+/* Scroll reveal: visible by default. JS arms the hidden state only for
+   elements still below the viewport when an observer is available, so
+   content can never get stuck invisible (no-JS, a failed observer, or a
+   full-page capture all stay visible). */
 .reveal {
-	opacity: 0;
-	transform: translateY(26px);
+	opacity: 1;
+	transform: translateY(0);
 	transition:
 		opacity 0.7s ease,
 		transform 0.7s cubic-bezier(0.2, 0, 0, 1);
 	will-change: opacity, transform;
+}
+.reveal.reveal-armed:not(.is-visible) {
+	opacity: 0;
+	transform: translateY(26px);
 }
 .reveal.is-visible {
 	opacity: 1;
