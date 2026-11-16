@@ -39,7 +39,7 @@
 		role="presentation"
 	></div>
 	<div
-		class="fixed inset-x-0 top-0 z-50 bg-white shadow-2xl"
+		class="fixed inset-x-0 top-0 z-50 max-h-dvh overflow-y-auto bg-white shadow-2xl"
 		transition:fly={{ y: -24, duration: 260, opacity: 1 }}
 		role="dialog"
 		aria-label="Search products"
@@ -54,13 +54,13 @@
 					bind:this={input}
 					bind:value={q}
 					type="search"
-					placeholder="Search sneakers, brands, categories…"
+					placeholder="Search sneakers…"
 					class="min-w-0 flex-1 bg-transparent text-lg font-medium outline-none placeholder:text-ink-soft/60"
 				/>
 				<button
 					type="button"
 					onclick={() => (ui.searchOpen = false)}
-					class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-mist"
+					class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-mist focus-visible:ring-2 focus-visible:ring-brand-500"
 					aria-label="Close search"
 				>
 					<X size={20} />
@@ -103,7 +103,7 @@
 							<button
 								type="button"
 								onclick={() => (q = term)}
-								class="rounded-full border border-line px-4 py-2 text-sm font-medium transition-colors hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600"
+								class="min-h-11 rounded-full border border-line px-4 py-2 text-sm font-medium transition-colors hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
 							>
 								{term}
 							</button>

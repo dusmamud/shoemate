@@ -50,13 +50,13 @@
 {#if product}
 	<section class="pt-6">
 		<nav aria-label="Breadcrumb" class="text-[13px] text-ink-soft">
-			<a href="/" class="hover:text-brand-600">Home</a> <span aria-hidden="true">/</span>
-			<a href="/shop" class="hover:text-brand-600">Shop</a> <span aria-hidden="true">/</span>
+			<a href="/" class="inline-flex min-h-11 items-center px-2 hover:text-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">Home</a> <span aria-hidden="true">/</span>
+			<a href="/shop" class="inline-flex min-h-11 items-center px-2 hover:text-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">Shop</a> <span aria-hidden="true">/</span>
 			<span class="font-medium text-ink">{product.name}</span>
 		</nav>
 
 		<div class="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-12">
-			<div class="relative overflow-hidden rounded-[2rem] bg-white shadow-card">
+			<div class="relative min-w-0 overflow-hidden rounded-[2rem] bg-white shadow-card">
 				<img src={product.image} alt={product.name} width="1600" height="1600" class="aspect-square w-full object-cover" fetchpriority="high" />
 				{#if product.badge}
 					<span class="absolute top-4 left-4 rounded-full bg-ink px-3.5 py-1.5 text-xs font-bold tracking-wide text-white uppercase">{product.badge}</span>
@@ -68,7 +68,7 @@
 				{/if}
 			</div>
 
-			<div>
+			<div class="min-w-0">
 				<p class="text-sm font-bold tracking-widest text-brand-500 uppercase">{product.brand} · {product.category}</p>
 				<h1 class="mt-2 text-3xl leading-tight font-extrabold tracking-tight sm:text-4xl">{product.name}</h1>
 				<p class="mt-2 flex flex-wrap items-center gap-2 text-sm">
@@ -82,7 +82,7 @@
 					</span>
 				</p>
 
-				<div class="mt-4 flex items-baseline gap-3">
+				<div class="mt-4 flex flex-wrap items-baseline gap-3">
 					<span class="text-3xl font-extrabold">${product.price}</span>
 					{#if product.oldPrice}
 						<span class="text-lg text-ink-soft line-through">${product.oldPrice}</span>
@@ -98,7 +98,7 @@
 				<div class="mt-7">
 					<div class="flex items-center justify-between">
 						<h2 id="size-heading" class="text-sm font-bold">Select size <span class="font-normal text-ink-soft">(UK)</span></h2>
-						<button type="button" class="text-[13px] font-medium text-brand-600 underline underline-offset-2" onclick={() => alert('True to size. If you are between sizes, go half a size up.')}>
+						<button type="button" class="flex min-h-11 items-center px-2 -mx-2 text-[13px] font-medium text-brand-600 underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500" onclick={() => alert('True to size. If you are between sizes, go half a size up.')}>
 							Size guide
 						</button>
 					</div>
@@ -112,7 +112,7 @@
 									size = s;
 									sizeError = false;
 								}}
-								class="flex h-12 items-center justify-center rounded-2xl border-2 text-sm font-semibold transition-all {size === s
+								class="flex h-12 items-center justify-center rounded-2xl border-2 text-sm font-semibold transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 {size === s
 									? 'border-ink bg-ink text-white'
 									: 'border-line bg-white hover:border-ink'}"
 							>
@@ -136,18 +136,18 @@
 
 				<div class="mt-7 flex flex-wrap items-center gap-3">
 					<div class="flex items-center rounded-full border border-line bg-white">
-						<button type="button" onclick={() => (qty = Math.max(1, qty - 1))} class="flex h-12 w-11 items-center justify-center" aria-label="Decrease quantity">
+						<button type="button" onclick={() => (qty = Math.max(1, qty - 1))} class="flex h-12 w-11 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-brand-500" aria-label="Decrease quantity">
 							<Minus size={17} weight="bold" />
 						</button>
 						<span class="w-8 text-center font-bold" aria-live="polite">{qty}</span>
-						<button type="button" onclick={() => (qty = Math.min(9, qty + 1))} class="flex h-12 w-11 items-center justify-center" aria-label="Increase quantity">
+						<button type="button" onclick={() => (qty = Math.min(9, qty + 1))} class="flex h-12 w-11 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-brand-500" aria-label="Increase quantity">
 							<Plus size={17} weight="bold" />
 						</button>
 					</div>
 					<button
 						type="button"
 						onclick={() => addToCart(true)}
-						class="flex h-12 flex-1 items-center justify-center gap-2 rounded-full text-sm font-semibold text-white transition-colors {justAdded
+						class="order-3 flex h-12 w-full items-center justify-center gap-2 rounded-full text-sm font-semibold text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 sm:order-none sm:w-auto sm:flex-1 {justAdded
 							? 'bg-emerald-600'
 							: 'bg-ink hover:bg-brand-500'}"
 					>
@@ -162,7 +162,7 @@
 						onclick={() => wishlist.toggle(product.slug)}
 						aria-pressed={wishlist.has(product.slug)}
 						aria-label="Toggle wishlist"
-						class="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-white transition-colors hover:border-brand-500 {wishlist.has(product.slug)
+						class="order-2 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-line bg-white transition-colors hover:border-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 sm:order-none {wishlist.has(product.slug)
 							? 'text-brand-500'
 							: ''}"
 					>
@@ -172,7 +172,7 @@
 				<button
 					type="button"
 					onclick={buyNow}
-					class="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-500 text-sm font-semibold text-white transition-colors hover:bg-brand-600"
+					class="mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-500 text-sm font-semibold text-white transition-colors hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
 				>
 					Buy it now <ArrowRight size={17} weight="bold" />
 				</button>
@@ -185,15 +185,15 @@
 
 				<div class="mt-6 divide-y divide-line rounded-3xl border border-line bg-white">
 					<details class="px-5 py-4">
-						<summary class="cursor-pointer text-sm font-bold">Shipping &amp; delivery</summary>
+						<summary class="min-h-11 cursor-pointer rounded-lg py-3 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">Shipping &amp; delivery</summary>
 						<p class="mt-2 text-sm leading-relaxed text-ink-soft">Orders ship within 24 hours from our Portland warehouse. Standard delivery is 2–4 business days; express (1–2 days) is available at checkout.</p>
 					</details>
 					<details class="px-5 py-4">
-						<summary class="cursor-pointer text-sm font-bold">Returns &amp; exchanges</summary>
+						<summary class="min-h-11 cursor-pointer rounded-lg py-3 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">Returns &amp; exchanges</summary>
 						<p class="mt-2 text-sm leading-relaxed text-ink-soft">Unworn shoes can be returned within 30 days for a full refund or a free size exchange.</p>
 					</details>
 					<details class="px-5 py-4">
-						<summary class="cursor-pointer text-sm font-bold">Materials &amp; care</summary>
+						<summary class="min-h-11 cursor-pointer rounded-lg py-3 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">Materials &amp; care</summary>
 						<p class="mt-2 text-sm leading-relaxed text-ink-soft">Spot-clean with a soft brush and mild soap. Air-dry away from direct heat — never machine-wash.</p>
 					</details>
 				</div>
@@ -212,12 +212,40 @@
 				{/each}
 			</div>
 		</section>
+
+		<!-- Sticky mobile buy bar: keeps price + add-to-cart reachable without scrolling back up. Mobile only. -->
+		<div class="sticky bottom-0 z-30 -mx-4 mt-10 border-t border-line bg-white/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_rgb(22_19_15/0.08)] backdrop-blur sm:-mx-6 lg:hidden">
+			<div class="flex items-center gap-3">
+				<div class="min-w-0 flex-1">
+					<p class="truncate text-sm font-bold">{product.name}</p>
+					<p class="text-sm leading-tight">
+						<span class="font-extrabold">${product.price}</span>
+						{#if product.oldPrice}
+							<span class="ml-1.5 font-medium text-ink-soft line-through">${product.oldPrice}</span>
+						{/if}
+					</p>
+				</div>
+				<button
+					type="button"
+					onclick={() => addToCart(true)}
+					class="flex h-12 shrink-0 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 {justAdded
+						? 'bg-emerald-600'
+						: 'bg-ink hover:bg-brand-500'}"
+				>
+					{#if justAdded}
+						<Check size={18} weight="bold" /> Added
+					{:else}
+						<ShoppingBag size={18} weight="bold" /> Add to cart
+					{/if}
+				</button>
+			</div>
+		</div>
 	</section>
 {:else}
 	<section class="pt-20 pb-10 text-center">
 		<h1 class="text-3xl font-extrabold">Product not found</h1>
 		<p class="mt-2 text-ink-soft">That pair may have sold out or moved. Browse the latest drops instead.</p>
-		<a href="/shop" class="mt-6 inline-flex h-12 items-center gap-2 rounded-full bg-ink px-7 text-sm font-semibold text-white hover:bg-brand-500">
+		<a href="/shop" class="mt-6 inline-flex h-12 items-center gap-2 rounded-full bg-ink px-7 text-sm font-semibold text-white hover:bg-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">
 			Back to shop <ArrowRight size={17} weight="bold" />
 		</a>
 	</section>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowRight, Heart, Plus } from 'phosphor-svelte';
+	import { ArrowRight, Check, Heart, Plus } from 'phosphor-svelte';
 	import { cart, wishlist } from '#lib/store.svelte';
 	import type { Product } from '#lib/data/products';
 
@@ -14,10 +14,12 @@
 	}
 </script>
 
-<!-- Reference-minimal at rest (grey card, name, price, arrow); badges, wishlist
-	and quick-add appear on hover/focus only, so the resting grid matches the design. -->
+<!-- Reference-minimal at rest on desktop (grey card, name, price, arrow);
+     badges, wishlist and quick-add appear on hover/focus there. On touch /
+     small screens there is no hover, so everything is always visible —
+     otherwise quick-add and wishlist are unreachable on mobile. -->
 <article
-	class="group relative flex flex-col overflow-hidden rounded-3xl bg-mist transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card"
+	class="group relative flex h-full flex-col overflow-hidden rounded-3xl bg-mist transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card"
 >
 	<a href="/product/{product.slug}" class="relative block overflow-hidden bg-mist" aria-label={product.name}>
 		<img
@@ -30,14 +32,14 @@
 		/>
 		{#if product.badge}
 			<span
-				class="absolute top-3 left-3 rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide text-white uppercase opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100
+				class="absolute top-3 left-3 rounded-full px-3 py-1 text-xs font-semibold tracking-wide text-white uppercase transition-opacity lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-within:opacity-100
 				{product.badge === 'Deal' ? 'bg-ink' : product.badge === 'Limited' ? 'bg-ink' : 'bg-brand-500'}"
 			>
 				{product.badge}
 			</span>
 		{/if}
 		{#if product.oldPrice}
-			<span class="absolute top-3 right-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold text-brand-600 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
+			<span class="absolute top-3 right-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-brand-600 transition-opacity lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-within:opacity-100">
 				-{Math.round((1 - product.price / product.oldPrice) * 100)}%
 			</span>
 		{/if}
@@ -48,12 +50,12 @@
 		onclick={() => wishlist.toggle(product.slug)}
 		aria-label={wishlist.has(product.slug) ? 'Remove from wishlist' : 'Add to wishlist'}
 		aria-pressed={wishlist.has(product.slug)}
-		class="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white opacity-0 shadow-md transition-all hover:scale-110 group-hover:opacity-100 group-focus-within:opacity-100 {product.oldPrice
-			? 'translate-y-9'
-			: ''}"
+		class="absolute right-3 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-md transition-all hover:scale-110 lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-within:opacity-100 {product.oldPrice
+			? 'top-14'
+			: 'top-3'}"
 	>
 		<Heart
-			size={18}
+			size={20}
 			weight={wishlist.has(product.slug) ? 'fill' : 'regular'}
 			class={wishlist.has(product.slug) ? 'text-brand-500' : 'text-ink'}
 		/>
@@ -61,13 +63,13 @@
 
 	<div class="flex flex-1 flex-col p-4 sm:p-5">
 		<div class="flex items-start justify-between gap-2">
-			<a href="/product/{product.slug}" class="text-[15px] leading-snug font-semibold hover:text-brand-600 sm:text-base">
+			<a href="/product/{product.slug}" class="flex min-h-11 items-center text-[15px] leading-snug font-semibold hover:text-brand-600 sm:text-base">
 				{product.name}
 			</a>
 			<a
 				href="/product/{product.slug}"
 				aria-label="View {product.name}"
-				class="mt-0.5 shrink-0 text-ink-soft transition-colors hover:text-brand-600"
+				class="-my-3 -mr-3 flex h-11 w-11 shrink-0 items-center justify-center text-ink-soft transition-colors hover:text-brand-600"
 			>
 				<ArrowRight size={18} weight="bold" />
 			</a>
@@ -78,18 +80,18 @@
 				<span class="text-sm text-ink-soft line-through">${product.oldPrice}</span>
 			{/if}
 		</div>
-		<div class="grid grid-rows-[0fr] transition-all duration-300 group-hover:grid-rows-[1fr] group-focus-within:grid-rows-[1fr]">
+		<div class="grid grid-rows-[1fr] transition-all duration-300 lg:grid-rows-[0fr] lg:group-hover:grid-rows-[1fr] lg:group-focus-within:grid-rows-[1fr]">
 			<div class="overflow-hidden">
 				<button
 					type="button"
 					onclick={quickAdd}
-					class="mt-3 flex h-10 w-full items-center justify-center gap-1.5 rounded-full px-3 text-[13px] font-semibold text-white transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 {added
+					class="mt-3 flex h-11 w-full items-center justify-center gap-1.5 rounded-full px-3 text-sm font-semibold text-white {added
 						? 'bg-emerald-600'
 						: 'bg-ink hover:bg-brand-500'}"
 					aria-label="Quick add {product.name} to cart"
 				>
 					{#if added}
-						Added ✓
+						<Check size={16} weight="bold" /> Added
 					{:else}
 						<Plus size={16} weight="bold" />
 						Add to cart

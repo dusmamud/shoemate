@@ -32,14 +32,16 @@
 			<button
 				type="button"
 				onclick={copyCode}
-				class="mt-5 inline-flex items-center gap-2 rounded-full border-2 border-dashed border-white/40 px-5 py-2.5 font-mono text-lg font-bold tracking-widest transition-colors hover:border-brand-400 hover:text-brand-300"
+				class="mt-5 flex min-h-11 w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full border-2 border-dashed border-white/40 px-4 py-2.5 font-mono text-base font-bold tracking-widest transition-colors hover:border-brand-400 hover:text-brand-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto sm:px-5 sm:text-lg"
 				aria-label="Copy discount code SHOEMATE10"
 			>
-				<Tag size={19} /> SHOEMATE10 {copied ? '· Copied ✓' : '· Tap to copy'}
+				<Tag size={19} class="shrink-0" />
+				<span>SHOEMATE10</span>
+				<span class="font-sans text-sm font-semibold tracking-normal">{copied ? '· Copied ✓' : '· Tap to copy'}</span>
 			</button>
 			{#if biggest}
 				<p class="mt-4 text-sm text-white/70">
-					Biggest saving right now: <a href="/product/{biggest.slug}" class="font-semibold text-white underline decoration-brand-400 underline-offset-2">{biggest.name}</a>
+					Biggest saving right now: <a href="/product/{biggest.slug}" class="inline-flex min-h-11 items-center font-semibold text-white underline decoration-brand-400 underline-offset-2 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">{biggest.name}</a>
 					— save ${biggest.oldPrice! - biggest.price}.
 				</p>
 			{/if}
@@ -47,7 +49,7 @@
 	</Reveal>
 
 	<h2 class="mt-10 text-xl font-extrabold tracking-tight uppercase">On sale now</h2>
-	<div class="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+	<div class="mt-5 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
 		{#each deals as product, i}
 			<Reveal delay={Math.min(i, 5) * 50}>
 				<ProductCard {product} />

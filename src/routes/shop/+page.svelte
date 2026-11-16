@@ -91,32 +91,44 @@
 
 	<div class="mt-8 grid gap-8 lg:grid-cols-[240px_1fr]">
 		<!-- Filters -->
-		<aside class="lg:sticky lg:top-24 lg:self-start">
+		<aside class="min-w-0 lg:sticky lg:top-24 lg:self-start">
 			<button
 				type="button"
 				onclick={() => (filtersOpen = !filtersOpen)}
-				class="flex h-11 w-full items-center justify-center gap-2 rounded-full border border-line bg-white text-sm font-semibold lg:hidden"
+				class="sticky top-[72px] z-20 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-line bg-white text-sm font-semibold shadow-md focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:top-20 lg:hidden"
 				aria-expanded={filtersOpen}
+				aria-controls="shop-filters"
 			>
 				<SlidersHorizontal size={18} /> Filters
-				{#if activeFilters}<span class="rounded-full bg-brand-500 px-2 py-0.5 text-[11px] font-bold text-white">{activeFilters}</span>{/if}
+				{#if activeFilters}<span class="rounded-full bg-brand-500 px-2 py-0.5 text-xs font-bold text-white">{activeFilters}</span>{/if}
 			</button>
 
-			<div class="mt-4 space-y-6 rounded-3xl bg-white p-5 shadow-card {filtersOpen ? 'block' : 'hidden lg:block'}">
+			<div id="shop-filters" class="mt-4 space-y-6 rounded-3xl bg-white p-5 shadow-card {filtersOpen ? 'block' : 'hidden lg:block'}">
+				<div class="flex items-center justify-between lg:hidden">
+					<span class="text-sm font-bold">Filters</span>
+					<button
+						type="button"
+						onclick={() => (filtersOpen = false)}
+						aria-label="Close filters"
+						class="flex h-11 w-11 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-mist hover:text-ink focus-visible:ring-2 focus-visible:ring-brand-500"
+					>
+						<X size={20} />
+					</button>
+				</div>
 				<div>
 					<label for="shop-q" class="text-xs font-bold tracking-widest text-ink-soft uppercase">Search</label>
-					<div class="mt-2 flex items-center gap-2 rounded-full bg-mist px-3.5">
-						<MagnifyingGlass size={17} class="shrink-0 text-ink-soft" />
-						<input id="shop-q" type="search" bind:value={q} placeholder="Name or brand…" class="h-10 min-w-0 flex-1 bg-transparent text-sm outline-none" />
+					<div class="mt-2 flex h-12 items-center gap-2 rounded-full bg-mist px-3.5 focus-within:ring-2 focus-within:ring-brand-500">
+						<MagnifyingGlass size={18} class="shrink-0 text-ink-soft" />
+						<input id="shop-q" type="search" bind:value={q} placeholder="Name or brand…" class="h-full min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-ink-soft/60" />
 						{#if q}
-							<button type="button" onclick={() => (q = '')} aria-label="Clear search" class="text-ink-soft hover:text-ink"><X size={16} /></button>
+							<button type="button" onclick={() => (q = '')} aria-label="Clear search" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-white hover:text-ink focus-visible:ring-2 focus-visible:ring-brand-500"><X size={17} /></button>
 						{/if}
 					</div>
 				</div>
 
 				<div>
 					<label for="shop-collection" class="text-xs font-bold tracking-widest text-ink-soft uppercase">Collection</label>
-					<select id="shop-collection" bind:value={collection} class="mt-2 h-11 w-full rounded-full border border-line bg-white px-3.5 text-sm font-medium outline-none focus:border-brand-500">
+					<select id="shop-collection" bind:value={collection} class="mt-2 h-11 w-full rounded-full border border-line bg-white px-3.5 text-base font-medium outline-none focus:border-brand-500 focus-visible:ring-2 focus-visible:ring-brand-500">
 						<option value="all">All collections</option>
 						{#each Object.entries(collections) as [slug, c]}
 							<option value={slug}>{c.label}</option>
@@ -127,9 +139,9 @@
 				<div>
 					<span class="text-xs font-bold tracking-widest text-ink-soft uppercase">Category</span>
 					<div class="mt-2 flex flex-wrap gap-2">
-						<button type="button" onclick={() => (category = 'all')} class="rounded-full px-3.5 py-2 text-[13px] font-medium capitalize transition-colors {category === 'all' ? 'bg-ink text-white' : 'bg-mist hover:bg-peach'}">All</button>
+						<button type="button" onclick={() => (category = 'all')} aria-pressed={category === 'all'} class="min-h-11 rounded-full px-4 text-sm font-medium capitalize transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white {category === 'all' ? 'bg-ink text-white' : 'bg-mist hover:bg-peach'}">All</button>
 						{#each allCategories as c}
-							<button type="button" onclick={() => (category = c)} class="rounded-full px-3.5 py-2 text-[13px] font-medium capitalize transition-colors {category === c ? 'bg-ink text-white' : 'bg-mist hover:bg-peach'}">{c}</button>
+							<button type="button" onclick={() => (category = c)} aria-pressed={category === c} class="min-h-11 rounded-full px-4 text-sm font-medium capitalize transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white {category === c ? 'bg-ink text-white' : 'bg-mist hover:bg-peach'}">{c}</button>
 						{/each}
 					</div>
 				</div>
@@ -137,31 +149,49 @@
 				<div>
 					<span class="text-xs font-bold tracking-widest text-ink-soft uppercase">Brand</span>
 					<div class="mt-2 flex flex-wrap gap-2">
-						<button type="button" onclick={() => (brand = 'all')} class="rounded-full px-3.5 py-2 text-[13px] font-medium transition-colors {brand === 'all' ? 'bg-ink text-white' : 'bg-mist hover:bg-peach'}">All</button>
+						<button type="button" onclick={() => (brand = 'all')} aria-pressed={brand === 'all'} class="min-h-11 rounded-full px-4 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white {brand === 'all' ? 'bg-ink text-white' : 'bg-mist hover:bg-peach'}">All</button>
 						{#each allBrands as b}
-							<button type="button" onclick={() => (brand = b)} class="rounded-full px-3.5 py-2 text-[13px] font-medium transition-colors {brand === b ? 'bg-ink text-white' : 'bg-mist hover:bg-peach'}">{b}</button>
+							<button type="button" onclick={() => (brand = b)} aria-pressed={brand === b} class="min-h-11 rounded-full px-4 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white {brand === b ? 'bg-ink text-white' : 'bg-mist hover:bg-peach'}">{b}</button>
 						{/each}
 					</div>
 				</div>
 
 				<div>
-					<label for="shop-price" class="flex justify-between text-xs font-bold tracking-widest text-ink-soft uppercase">
-						Max price <span class="text-sm font-bold text-ink normal-case">${maxPrice}</span>
+					<label for="shop-price" class="flex items-baseline justify-between text-xs font-bold tracking-widest text-ink-soft uppercase">
+						Max price <span class="text-base font-bold text-ink normal-case">${maxPrice}</span>
 					</label>
-					<input id="shop-price" type="range" min="80" max="250" step="10" bind:value={maxPrice} class="mt-2 w-full accent-[#ff6b1a]" />
-					<div class="flex justify-between text-xs text-ink-soft"><span>$80</span><span>$250</span></div>
+					<input
+						id="shop-price"
+						type="range"
+						min="80"
+						max="250"
+						step="10"
+						bind:value={maxPrice}
+						style="--fill: {((maxPrice - 80) / 170) * 100}%"
+						aria-describedby="shop-price-range"
+						class="price-range mt-1 w-full"
+					/>
+					<div id="shop-price-range" class="mt-1 flex justify-between text-xs font-medium text-ink-soft"><span>$80</span><span>$250</span></div>
 				</div>
 
 				{#if activeFilters || q}
-					<button type="button" onclick={reset} class="h-10 w-full rounded-full bg-mist text-sm font-semibold transition-colors hover:bg-peach">
+					<button type="button" onclick={reset} class="h-11 w-full rounded-full bg-mist text-sm font-semibold transition-colors hover:bg-peach focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
 						Clear all filters
 					</button>
 				{/if}
+
+				<button
+					type="button"
+					onclick={() => (filtersOpen = false)}
+					class="h-12 w-full rounded-full bg-ink text-sm font-semibold text-white transition-colors hover:bg-brand-500 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white lg:hidden"
+				>
+					Show {filtered.length} result{filtered.length === 1 ? '' : 's'}
+				</button>
 			</div>
 		</aside>
 
 		<!-- Results -->
-		<div>
+		<div class="min-w-0">
 			<div class="flex flex-wrap items-center justify-between gap-3">
 				<p class="text-sm text-ink-soft" aria-live="polite">
 					Showing <strong class="text-ink">{filtered.length}</strong> of {products.length} products
@@ -169,7 +199,7 @@
 				<label class="flex items-center gap-2 text-sm font-medium">
 					Sort
 					<span class="relative">
-						<select bind:value={sort} class="h-11 appearance-none rounded-full border border-line bg-white pr-9 pl-4 text-sm font-medium outline-none focus:border-brand-500">
+						<select bind:value={sort} aria-label="Sort products" class="h-11 appearance-none rounded-full border border-line bg-white pr-9 pl-4 text-base font-medium outline-none focus:border-brand-500 focus-visible:ring-2 focus-visible:ring-brand-500">
 							<option value="featured">Featured</option>
 							<option value="bestsellers">Bestsellers</option>
 							<option value="rating">Top rated</option>
@@ -182,7 +212,7 @@
 			</div>
 
 			{#if filtered.length}
-				<div class="mt-5 grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-3">
+				<div class="mt-5 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:gap-5 xl:grid-cols-3">
 					{#each filtered as product, i}
 						<Reveal delay={Math.min(i, 5) * 50}>
 							<ProductCard {product} />
@@ -190,10 +220,10 @@
 					{/each}
 				</div>
 			{:else}
-				<div class="mt-5 rounded-3xl bg-white p-10 text-center shadow-card">
+				<div class="mt-5 rounded-3xl bg-white p-6 text-center shadow-card sm:p-10">
 					<p class="text-lg font-bold">No sneakers match those filters</p>
 					<p class="mt-1 text-sm text-ink-soft">Try a different brand, category or price range.</p>
-					<button type="button" onclick={reset} class="mt-5 h-11 rounded-full bg-ink px-6 text-sm font-semibold text-white hover:bg-brand-500">
+					<button type="button" onclick={reset} class="mt-5 h-11 rounded-full bg-ink px-6 text-sm font-semibold text-white hover:bg-brand-500 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2">
 						Clear all filters
 					</button>
 				</div>
@@ -201,3 +231,64 @@
 		</div>
 	</div>
 </section>
+
+<style>
+	/* Custom price slider: 28px thumb, brand-filled track (WebKit + Firefox). */
+	.price-range {
+		-webkit-appearance: none;
+		appearance: none;
+		height: 44px;
+		background: transparent;
+		cursor: pointer;
+	}
+	.price-range::-webkit-slider-runnable-track {
+		height: 8px;
+		border-radius: 9999px;
+		background: linear-gradient(
+			to right,
+			#ff6b1a 0%,
+			#ff6b1a var(--fill, 100%),
+			#ece7e2 var(--fill, 100%),
+			#ece7e2 100%
+		);
+	}
+	.price-range::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		appearance: none;
+		box-sizing: border-box;
+		width: 28px;
+		height: 28px;
+		margin-top: -10px;
+		border-radius: 9999px;
+		background: #fff;
+		border: 3px solid #ff6b1a;
+		box-shadow: 0 2px 8px rgb(22 19 15 / 0.25);
+	}
+	.price-range::-moz-range-track {
+		height: 8px;
+		border-radius: 9999px;
+		background: #ece7e2;
+	}
+	.price-range::-moz-range-progress {
+		height: 8px;
+		border-radius: 9999px;
+		background: #ff6b1a;
+	}
+	.price-range::-moz-range-thumb {
+		box-sizing: border-box;
+		width: 28px;
+		height: 28px;
+		border-radius: 9999px;
+		background: #fff;
+		border: 3px solid #ff6b1a;
+		box-shadow: 0 2px 8px rgb(22 19 15 / 0.25);
+	}
+	.price-range:focus-visible::-webkit-slider-thumb {
+		outline: 2px solid #ff6b1a;
+		outline-offset: 2px;
+	}
+	.price-range:focus-visible::-moz-range-thumb {
+		outline: 2px solid #ff6b1a;
+		outline-offset: 2px;
+	}
+</style>

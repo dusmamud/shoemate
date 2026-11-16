@@ -93,13 +93,13 @@
 				<div class="mt-6 flex flex-col items-center gap-3 lg:items-start">
 					<a
 						href="/shop"
-						class="flex h-12 items-center gap-2 rounded-full bg-brand-500 px-6 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 transition-all hover:-translate-y-0.5 hover:bg-brand-600"
+						class="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-500 px-6 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 transition-all hover:-translate-y-0.5 hover:bg-brand-600 sm:w-auto"
 					>
 						Shop Now <ArrowRight size={17} weight="bold" />
 					</a>
 					<a
 						href="/categories"
-						class="flex h-12 items-center rounded-full bg-ink px-6 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-brand-500"
+						class="flex h-12 w-full items-center justify-center rounded-full bg-ink px-6 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-brand-500 sm:w-auto"
 					>
 						Explore Collection
 					</a>
@@ -132,7 +132,7 @@
 					<span class="text-sm font-medium">Customer Rating</span>
 				</div>
 				<p class="pt-1 text-center text-sm text-ink-soft lg:text-right">
-					Price: <a href="/product/{heroProduct.slug}" class="text-lg font-bold text-ink hover:text-brand-600">${heroProduct.price}.00</a>
+					Price: <a href="/product/{heroProduct.slug}" class="inline-flex min-h-11 items-center text-lg font-bold text-ink hover:text-brand-600">${heroProduct.price}.00</a>
 				</p>
 			</div>
 		</div>
@@ -160,7 +160,7 @@
 		<Reveal class="sm:row-span-2">
 			<a
 				href="/categories"
-				class="group relative block h-full min-h-[420px] overflow-hidden rounded-3xl shadow-card transition-shadow hover:shadow-lift lg:min-h-[560px]"
+				class="group relative block h-full min-h-[380px] overflow-hidden rounded-3xl shadow-card transition-shadow hover:shadow-lift sm:min-h-[420px] lg:min-h-[560px]"
 				style="background: {categories[0].bg}"
 			>
 				<img
@@ -238,12 +238,12 @@
 	<Reveal>
 		<div class="flex items-end justify-between gap-4">
 			<h2 class="text-xl font-extrabold tracking-tight uppercase sm:text-2xl">Latest Products</h2>
-			<a href="/shop" class="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-soft transition-colors hover:text-brand-600">
+			<a href="/shop" class="inline-flex min-h-11 shrink-0 items-center gap-1.5 text-sm font-semibold text-ink-soft transition-colors hover:text-brand-600">
 				Browse All Products <ArrowRight size={16} weight="bold" />
 			</a>
 		</div>
 	</Reveal>
-	<div class="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+	<div class="mt-6 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:gap-5 lg:grid-cols-4">
 		{#each latest as product, i}
 			<Reveal delay={i * 70}>
 				<ProductCard {product} />
@@ -268,9 +268,9 @@
 					</p>
 					<div class="mt-6 flex items-center gap-2 sm:gap-3" role="timer" aria-label="Deal ends in {cd.d} days, {cd.h} hours, {cd.m} minutes">
 						{#each countdown as [val, label]}
-							<div class="min-w-[68px] rounded-2xl bg-white/10 px-3 py-2.5 text-center backdrop-blur">
-								<span class="block text-2xl font-extrabold tabular-nums">{pad(val)}</span>
-								<span class="text-[11px] font-medium tracking-widest text-white/60 uppercase">{label}</span>
+							<div class="min-w-0 flex-1 rounded-2xl bg-white/10 px-1.5 py-2.5 text-center backdrop-blur sm:px-3">
+								<span class="block text-xl font-extrabold tabular-nums sm:text-2xl">{pad(val)}</span>
+								<span class="text-xs font-medium tracking-wide text-white/60 uppercase">{label}</span>
 							</div>
 						{/each}
 					</div>
@@ -302,12 +302,12 @@
 	<Reveal>
 		<div class="flex items-end justify-between gap-4">
 			<h2 class="text-xl font-extrabold tracking-tight uppercase sm:text-2xl">Bestsellers</h2>
-			<a href="/shop?sort=bestsellers" class="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-soft transition-colors hover:text-brand-600">
+			<a href="/shop?sort=bestsellers" class="inline-flex min-h-11 shrink-0 items-center gap-1.5 text-sm font-semibold text-ink-soft transition-colors hover:text-brand-600">
 				Shop bestsellers <ArrowRight size={16} weight="bold" />
 			</a>
 		</div>
 	</Reveal>
-	<div class="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+	<div class="mt-6 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:gap-5 lg:grid-cols-4">
 		{#each bestsellers.slice(0, 4) as product, i}
 			<Reveal delay={i * 70}>
 				<ProductCard {product} />
@@ -379,7 +379,7 @@
 					type="email"
 					required
 					placeholder="Email address"
-					class="h-12 flex-1 rounded-full bg-white px-5 text-sm text-ink outline-none placeholder:text-ink-soft sm:bg-transparent"
+					class="h-12 w-full min-w-0 rounded-full bg-white px-5 text-base text-ink outline-none placeholder:text-ink-soft sm:w-auto sm:flex-1 sm:bg-transparent"
 				/>
 				<button type="submit" class="h-12 shrink-0 rounded-full bg-ink px-6 text-sm font-semibold text-white transition-colors hover:bg-ink/80 sm:hover:bg-brand-600">
 					Claim 10% off

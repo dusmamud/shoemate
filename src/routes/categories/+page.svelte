@@ -25,7 +25,7 @@
 			<Reveal delay={i * 70}>
 				<a
 					href="/shop?collection={cat.slug}"
-					class="group relative block min-h-[280px] overflow-hidden rounded-3xl shadow-card transition-shadow hover:shadow-lift sm:min-h-[320px]"
+					class="group relative block min-h-[280px] overflow-hidden rounded-3xl shadow-card transition-shadow hover:shadow-lift focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 sm:min-h-[320px]"
 					style="background: {cat.bg}"
 				>
 					<img
@@ -39,7 +39,7 @@
 					<span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent p-6 pt-24 text-white">
 						<span class="text-2xl font-extrabold">{cat.name}</span>
 						<span class="mt-1 block text-sm text-white/85">{cat.tagline} · {cat.count} styles</span>
-						<span class="mt-3 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[13px] font-semibold text-ink transition-colors group-hover:bg-brand-500 group-hover:text-white">
+						<span class="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-ink transition-colors group-hover:bg-brand-500 group-hover:text-white">
 							{cat.cta} <ArrowRight size={15} weight="bold" />
 						</span>
 					</span>
@@ -55,7 +55,7 @@
 				{#each brands as brand}
 					<a
 						href="/shop?brand={brand}"
-						class="rounded-full border border-line px-5 py-2.5 text-sm font-semibold transition-colors hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600"
+						class="inline-flex min-h-11 items-center rounded-full border border-line px-5 py-2.5 text-sm font-semibold transition-colors hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
 					>
 						{brand}
 					</a>

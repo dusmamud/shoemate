@@ -3,7 +3,7 @@
 	import { ArrowRight, MagnifyingGlass } from 'phosphor-svelte';
 </script>
 
-<section class="mx-auto max-w-2xl px-4 pt-20 pb-10 text-center sm:px-6">
+<section class="mx-auto max-w-2xl pt-20 pb-10 text-center">
 	<span class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-peach text-brand-500">
 		<MagnifyingGlass size={34} />
 	</span>

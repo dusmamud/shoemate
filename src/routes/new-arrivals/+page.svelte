@@ -23,7 +23,7 @@
 
 	{#if fresh.length}
 		<h2 class="mt-10 text-lg font-extrabold tracking-tight uppercase">Fresh this week</h2>
-		<div class="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+		<div class="mt-5 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
 			{#each fresh as product, i}
 				<Reveal delay={i * 60}>
 					<ProductCard {product} />
@@ -33,7 +33,7 @@
 	{/if}
 
 	<h2 class="mt-12 text-lg font-extrabold tracking-tight uppercase">All new arrivals</h2>
-	<div class="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+	<div class="mt-5 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
 		{#each arrivals as product, i}
 			<Reveal delay={Math.min(i, 5) * 50}>
 				<ProductCard {product} />

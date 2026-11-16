@@ -44,7 +44,7 @@
 				loading="lazy"
 				width="2048"
 				height="1152"
-				class="w-full rounded-[2rem] object-cover shadow-card"
+				class="aspect-[16/9] w-full rounded-[2rem] object-cover shadow-card"
 			/>
 		</Reveal>
 		<Reveal delay={90}>
@@ -60,7 +60,7 @@
 				</p>
 				<div class="mt-6 grid grid-cols-2 gap-3">
 					{#each stats as [num, label]}
-						<div class="rounded-3xl bg-white p-5 shadow-card">
+						<div class="rounded-3xl bg-white p-4 shadow-card sm:p-5">
 							<p class="text-2xl font-extrabold text-brand-500">{num}</p>
 							<p class="mt-0.5 text-sm text-ink-soft">{label}</p>
 						</div>
@@ -96,7 +96,7 @@
 						<p class="flex items-center gap-2 font-bold"><MapPin size={19} class="text-brand-500" /> {store.city}</p>
 						<p class="mt-2 text-sm text-ink-soft">{store.address}</p>
 						<p class="mt-1 text-sm text-ink-soft">{store.hours}</p>
-						<a href="/shop" class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-500">
+						<a href="/shop" class="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-full py-2 text-sm font-semibold text-brand-600 hover:text-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">
 							Shop this city’s picks <ArrowRight size={15} weight="bold" />
 						</a>
 					</div>
@@ -111,7 +111,7 @@
 				<h2 class="text-2xl font-extrabold">Ready to find your pair?</h2>
 				<p class="mt-1 text-sm text-white/70">New drops land every Friday. Members shop them first.</p>
 			</div>
-			<a href="/new-arrivals" class="flex h-12 shrink-0 items-center gap-2 rounded-full bg-brand-500 px-7 text-sm font-semibold text-white transition-colors hover:bg-brand-400">
+			<a href="/new-arrivals" class="flex h-12 w-full shrink-0 items-center justify-center gap-2 rounded-full bg-brand-500 px-7 text-sm font-semibold text-white transition-colors hover:bg-brand-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto">
 				Shop new arrivals <ArrowRight size={17} weight="bold" />
 			</a>
 		</div>

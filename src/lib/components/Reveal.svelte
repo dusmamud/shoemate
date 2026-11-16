@@ -39,6 +39,6 @@
 	});
 </script>
 
-<div bind:this={el} class="reveal {cls}" style="transition-delay: {delay}ms">
+<div bind:this={el} class="reveal h-full {cls}" style="transition-delay: {delay}ms">
 	{@render children()}
 </div>

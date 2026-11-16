@@ -50,6 +50,25 @@
 	}
 	body {
 		@apply bg-white font-sans text-ink antialiased;
+		overflow-x: clip;
+		-webkit-tap-highlight-color: transparent;
+	}
+	/* Every control is ≥16px text so iOS never zooms on focus. Utilities
+	   (e.g. text-sm) still win where a component sets them deliberately —
+	   those inputs were bumped to text-base in their components. */
+	input,
+	select,
+	textarea {
+		font-size: 16px;
+	}
+	button,
+	a {
+		touch-action: manipulation;
+	}
+	/* Visible keyboard focus everywhere (brand ring, 2px + offset). */
+	:focus-visible {
+		outline: 2px solid var(--color-brand-500);
+		outline-offset: 2px;
 	}
 	::selection {
 		@apply bg-brand-500 text-white;
