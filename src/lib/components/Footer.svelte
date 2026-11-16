@@ -12,7 +12,7 @@
 </script>
 
 <footer class="mt-20 bg-ink text-white">
-	<div class="mx-auto max-w-[1216px] px-4 py-14 sm:px-6 lg:px-8">
+	<div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
 		<div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.4fr]">
 			<div>
 				<a href="/" class="flex items-center gap-2" aria-label="Shoemate home">

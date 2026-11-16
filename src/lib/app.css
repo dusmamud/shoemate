@@ -49,7 +49,7 @@
 		scroll-behavior: smooth;
 	}
 	body {
-		@apply bg-cream font-sans text-ink antialiased;
+		@apply bg-white font-sans text-ink antialiased;
 	}
 	::selection {
 		@apply bg-brand-500 text-white;
