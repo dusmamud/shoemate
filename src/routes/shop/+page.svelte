@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { browser } from '$app/env';
 	import { page } from '$app/state';
 	import { CaretDown, MagnifyingGlass, SlidersHorizontal, X } from 'phosphor-svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import Reveal from '#lib/components/Reveal.svelte';
-	import { products } from '#lib/data/products';
+	import Skeleton from '#lib/components/Skeleton.svelte';
+	import { products, SIZES, type Product } from '#lib/data/products';
 
 	const allBrands = [...new Set(products.map((p) => p.brand))].sort();
 	const allCategories = [...new Set(products.map((p) => p.category))].sort();
@@ -15,13 +17,42 @@
 		'sneaker-drops': { label: 'Sneaker Drops', filter: (p) => p.badge === 'New' || p.badge === 'Limited' }
 	};
 
+	/**
+	 * Per-size stock. Reads real per-size data when it exists — B1's shape is
+	 * `product.sizeStock: { size, stock }[]` (demo numbers, sum equals `stock`).
+	 * Also accepts a Record<string, number> shape, otherwise falls back to
+	 * the single per-product stock number: a size is in stock while the
+	 * product has any stock at all.
+	 */
+	type SizeStockLike = { size: string; stock: number };
+	type ProductWithSizeStock = Product & {
+		sizeStock?: SizeStockLike[] | Record<string, number>;
+		stockBySize?: SizeStockLike[] | Record<string, number>;
+	};
+	function sizeInStock(p: Product, size: string): boolean {
+		const perSize = (p as ProductWithSizeStock).sizeStock ?? (p as ProductWithSizeStock).stockBySize;
+		if (Array.isArray(perSize)) {
+			const entry = perSize.find((e) => e.size === size);
+			return entry ? entry.stock > 0 : false;
+		}
+		if (perSize) return (perSize[size] ?? 0) > 0;
+		return p.stock > 0 && p.sizes.includes(size);
+	}
+	// A size button is disabled only when no product has that size in stock.
+	function sizeAvailable(size: string): boolean {
+		return products.some((p) => sizeInStock(p, size));
+	}
+
 	let q = $state('');
 	let brand = $state('all');
 	let category = $state('all');
 	let collection = $state('all');
 	let maxPrice = $state(250);
 	let sort = $state('featured');
+	let size = $state('all');
+	let inStockOnly = $state(false);
 	let filtersOpen = $state(false);
+	let filtering = $state(false);
 
 	// url.searchParams is not available during prerender — read it after mount.
 	$effect(() => {
@@ -31,6 +62,28 @@
 		category = sp.get('category') ?? 'all';
 		collection = sp.get('collection') ?? 'all';
 		sort = sp.get('sort') ?? 'featured';
+		size = sp.get('size') ?? 'all';
+		inStockOnly = sp.get('instock') === '1';
+		maxPrice = Number(sp.get('maxprice') ?? 250) || 250;
+	});
+
+	// Keep filters + sort in the URL (replaceState — no navigation, no reload).
+	$effect(() => {
+		if (!browser) return;
+		const sp = new URLSearchParams();
+		if (q.trim()) sp.set('q', q.trim());
+		if (brand !== 'all') sp.set('brand', brand);
+		if (category !== 'all') sp.set('category', category);
+		if (collection !== 'all') sp.set('collection', collection);
+		if (sort !== 'featured') sp.set('sort', sort);
+		if (size !== 'all') sp.set('size', size);
+		if (inStockOnly) sp.set('instock', '1');
+		if (maxPrice < 250) sp.set('maxprice', String(maxPrice));
+		const query = sp.toString();
+		const next = query ? `${page.url.pathname}?${query}` : page.url.pathname;
+		if (next !== page.url.pathname + page.url.search) {
+			history.replaceState(null, '', next);
+		}
 	});
 
 	let filtered = $derived.by(() => {
@@ -48,18 +101,47 @@
 			if (category !== 'all' && p.category !== category) return false;
 			if (collection !== 'all' && !collections[collection]?.filter(p)) return false;
 			if (p.price > maxPrice) return false;
+			if (inStockOnly && p.stock <= 0) return false;
+			if (size !== 'all' && !sizeInStock(p, size)) return false;
 			return true;
 		});
 		if (sort === 'price-asc') list = [...list].sort((a, b) => a.price - b.price);
 		else if (sort === 'price-desc') list = [...list].sort((a, b) => b.price - a.price);
 		else if (sort === 'rating') list = [...list].sort((a, b) => b.rating - a.rating);
 		else if (sort === 'bestsellers') list = [...list].sort((a, b) => b.reviews - a.reviews);
+		else if (sort === 'newest')
+			list = [...list].sort((a, b) => Number(b.badge === 'New') - Number(a.badge === 'New'));
+		else if (sort === 'discount')
+			list = [...list].sort((a, b) => (b.oldPrice ?? b.price) - b.price - ((a.oldPrice ?? a.price) - a.price));
 		return list;
 	});
 
 	let activeFilters = $derived(
-		(brand !== 'all' ? 1 : 0) + (category !== 'all' ? 1 : 0) + (collection !== 'all' ? 1 : 0) + (maxPrice < 250 ? 1 : 0)
+		(brand !== 'all' ? 1 : 0) +
+			(category !== 'all' ? 1 : 0) +
+			(collection !== 'all' ? 1 : 0) +
+			(maxPrice < 250 ? 1 : 0) +
+			(size !== 'all' ? 1 : 0) +
+			(inStockOnly ? 1 : 0)
 	);
+
+	// Applied-filters overview chips (M-17).
+	interface Chip {
+		label: string;
+		clear: () => void;
+	}
+	let chips = $derived.by((): Chip[] => {
+		const out: Chip[] = [];
+		if (q.trim()) out.push({ label: `“${q.trim()}”`, clear: () => (q = '') });
+		if (brand !== 'all') out.push({ label: brand, clear: () => (brand = 'all') });
+		if (category !== 'all') out.push({ label: category, clear: () => (category = 'all') });
+		if (collection !== 'all')
+			out.push({ label: collections[collection]?.label ?? collection, clear: () => (collection = 'all') });
+		if (size !== 'all') out.push({ label: `Size ${size}`, clear: () => (size = 'all') });
+		if (inStockOnly) out.push({ label: 'In stock only', clear: () => (inStockOnly = false) });
+		if (maxPrice < 250) out.push({ label: `Up to $${maxPrice}`, clear: () => (maxPrice = 250) });
+		return out;
+	});
 
 	function reset() {
 		q = '';
@@ -68,14 +150,33 @@
 		collection = 'all';
 		maxPrice = 250;
 		sort = 'featured';
+		size = 'all';
+		inStockOnly = false;
 	}
+
+	// Brief skeleton while the grid re-filters (N-09). Local data is instant,
+	// so this is a short visual beat, not a wait for a network round-trip.
+	let filterKey = $derived([q, brand, category, collection, maxPrice, sort, size, inStockOnly].join('|'));
+	let firstRun = true;
+	let filterTimer: ReturnType<typeof setTimeout> | undefined;
+	$effect(() => {
+		void filterKey;
+		if (firstRun) {
+			firstRun = false;
+			return;
+		}
+		filtering = true;
+		clearTimeout(filterTimer);
+		filterTimer = setTimeout(() => (filtering = false), 280);
+		return () => clearTimeout(filterTimer);
+	});
 
 	const collectionLabel = $derived(collection !== 'all' ? collections[collection]?.label : null);
 </script>
 
 <svelte:head>
 	<title>Shop All Sneakers — Shoemate</title>
-	<meta name="description" content="Browse all premium sneakers at Shoemate. Filter by brand, category and price." />
+	<meta name="description" content="Browse all premium sneakers at Shoemate. Filter by brand, category, size and price." />
 </svelte:head>
 
 <section class="pt-8">
@@ -156,6 +257,47 @@
 					</div>
 				</div>
 
+				<!-- Size filter (M-16): sizes with no stock anywhere are disabled. -->
+				<div>
+					<span class="text-xs font-bold tracking-widest text-ink-soft uppercase">Size</span>
+					<div class="mt-2 flex flex-wrap gap-2">
+						<button type="button" onclick={() => (size = 'all')} aria-pressed={size === 'all'} class="min-h-11 rounded-full px-4 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white {size === 'all' ? 'bg-ink text-white' : 'bg-mist hover:bg-peach'}">All sizes</button>
+						{#each SIZES as s}
+							{@const available = sizeAvailable(s)}
+							<button
+								type="button"
+								onclick={() => (size = s)}
+								disabled={!available}
+								aria-pressed={size === s}
+								title={available ? undefined : `${s} is out of stock`}
+								class="min-h-11 rounded-full px-4 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white {size === s
+									? 'bg-ink text-white'
+									: available
+										? 'bg-mist hover:bg-peach'
+										: 'cursor-not-allowed bg-mist text-ink-soft/50 line-through'}"
+							>
+								{s}
+							</button>
+						{/each}
+					</div>
+				</div>
+
+				<!-- In-stock toggle (M-16) -->
+				<div>
+					<button
+						type="button"
+						role="switch"
+						aria-checked={inStockOnly}
+						onclick={() => (inStockOnly = !inStockOnly)}
+						class="flex min-h-11 w-full items-center justify-between gap-3 rounded-2xl bg-mist px-4 py-2 text-left text-sm font-semibold transition-colors hover:bg-peach focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+					>
+						<span>In stock only</span>
+						<span class="relative h-6 w-11 shrink-0 rounded-full transition-colors {inStockOnly ? 'bg-brand-500' : 'bg-line'}" aria-hidden="true">
+							<span class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform {inStockOnly ? 'translate-x-5' : ''}"></span>
+						</span>
+					</button>
+				</div>
+
 				<div>
 					<label for="shop-price" class="flex items-baseline justify-between text-xs font-bold tracking-widest text-ink-soft uppercase">
 						Max price <span class="text-base font-bold text-ink normal-case">${maxPrice}</span>
@@ -203,6 +345,8 @@
 							<option value="featured">Featured</option>
 							<option value="bestsellers">Bestsellers</option>
 							<option value="rating">Top rated</option>
+							<option value="newest">Newest</option>
+							<option value="discount">Biggest discount</option>
 							<option value="price-asc">Price: low to high</option>
 							<option value="price-desc">Price: high to low</option>
 						</select>
@@ -211,18 +355,51 @@
 				</label>
 			</div>
 
-			{#if filtered.length}
+			<!-- Applied-filters overview (M-17) -->
+			{#if chips.length}
+				<div class="mt-4 flex flex-wrap items-center gap-2" aria-label="Active filters">
+					{#each chips as chip}
+						<button
+							type="button"
+							onclick={chip.clear}
+							class="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-ink px-3.5 text-sm font-medium text-white transition-colors hover:bg-brand-500 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+							aria-label="Remove filter {chip.label}"
+						>
+							{chip.label} <X size={14} weight="bold" />
+						</button>
+					{/each}
+					<button
+						type="button"
+						onclick={reset}
+						class="inline-flex min-h-11 items-center rounded-full px-3.5 text-sm font-semibold text-brand-600 underline underline-offset-2 hover:text-brand-500 focus-visible:ring-2 focus-visible:ring-brand-500"
+					>
+						Clear all
+					</button>
+				</div>
+			{/if}
+
+			{#if filtering}
+				<div class="mt-5 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:gap-5 xl:grid-cols-3" aria-hidden="true">
+					{#each Array(6) as _, i (i)}
+						<div class="rounded-3xl bg-white p-4 shadow-card">
+							<Skeleton class="aspect-square w-full" label="Loading product" />
+							<Skeleton class="mt-3 h-5 w-3/4" label="Loading product" />
+							<Skeleton class="mt-2 h-5 w-1/3" label="Loading product" />
+						</div>
+					{/each}
+				</div>
+			{:else if filtered.length}
 				<div class="mt-5 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:gap-5 xl:grid-cols-3">
 					{#each filtered as product, i}
 						<Reveal delay={Math.min(i, 5) * 50}>
-							<ProductCard {product} />
+							<ProductCard {product} morph />
 						</Reveal>
 					{/each}
 				</div>
 			{:else}
 				<div class="mt-5 rounded-3xl bg-white p-6 text-center shadow-card sm:p-10">
 					<p class="text-lg font-bold">No sneakers match those filters</p>
-					<p class="mt-1 text-sm text-ink-soft">Try a different brand, category or price range.</p>
+					<p class="mt-1 text-sm text-ink-soft">Try a different brand, category, size or price range.</p>
 					<button type="button" onclick={reset} class="mt-5 h-11 rounded-full bg-ink px-6 text-sm font-semibold text-white hover:bg-brand-500 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2">
 						Clear all filters
 					</button>

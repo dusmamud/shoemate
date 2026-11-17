@@ -126,6 +126,13 @@
 						</button>
 					</div>
 				</div>
+				{#if mode === 'signin'}
+					<p class="mt-2 text-right">
+						<a href="/forgot-password" class="inline-flex min-h-11 items-center rounded-full px-2 text-[13px] font-semibold text-brand-600 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">
+							Forgot password?
+						</a>
+					</p>
+				{/if}
 				{#if error}
 					<p class="rounded-2xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700" role="alert">{error}</p>
 				{/if}

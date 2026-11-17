@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Component } from 'svelte';
-	import { ArrowRight, ArrowCounterClockwise, Fire, Headset, ShieldCheck, Sneaker, Star, Truck } from 'phosphor-svelte';
+	import { ArrowRight, ArrowCounterClockwise, Check, Fire, Headset, ShieldCheck, Sneaker, Star, Truck } from 'phosphor-svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
+	import RecentlyViewed from '#lib/components/RecentlyViewed.svelte';
 	import Reveal from '#lib/components/Reveal.svelte';
 	import { categories, heroProduct, products } from '#lib/data/products';
 
@@ -12,19 +13,19 @@
 	const testimonials = [
 		{
 			name: 'Aarav Mehta',
-			role: 'Verified Buyer · Mumbai',
+			role: 'Sample quote',
 			text: 'The Air Max DN fits like it was made for me. Delivery was faster than promised and the packaging felt premium.',
 			rating: 5
 		},
 		{
 			name: 'Sofia D’Souza',
-			role: 'Verified Buyer · Bengaluru',
+			role: 'Sample quote',
 			text: 'Ordered on Monday, ran a 10K in them on Saturday. Zero break-in needed — easily the most comfortable pair I own.',
 			rating: 5
 		},
 		{
 			name: 'Rohan Kapoor',
-			role: 'Verified Buyer · Delhi',
+			role: 'Sample quote',
 			text: 'Third pair from Shoemate. Prices beat every other store I checked, and the size guide is actually accurate.',
 			rating: 4
 		}
@@ -40,6 +41,11 @@
 		const id = setInterval(() => (now = Date.now()), 1000);
 		return () => clearInterval(id);
 	});
+
+	// Hero entrance (F-10): pure CSS keyframes on .hero-enter (see app.css) —
+	// no JS arming, so there is no SSR flash and no-JS still animates.
+	// Reduced motion kills the animation in CSS. The shoe's infinite float
+	// is untouched (it lives on the <img> inside the entering wrapper).
 	let diff = $derived(Math.max(0, target - now));
 	let cd = $derived({
 		d: Math.floor(diff / 86400000),
@@ -62,6 +68,16 @@
 			[cd.s, 'Secs']
 		] as [number, string][]
 	);
+
+	// Home newsletter: inline success, same pattern as the footer form (no alert()).
+	let newsletterEmail = $state('');
+	let newsletterDone = $state(false);
+
+	function subscribeNewsletter(e: SubmitEvent) {
+		e.preventDefault();
+		if (!newsletterEmail.includes('@')) return;
+		newsletterDone = true;
+	}
 </script>
 
 <svelte:head>
@@ -77,20 +93,20 @@
 
 	<div class="relative px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
 		<div class="relative text-center">
-			<p class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-500 sm:text-base">
+			<p class="hero-enter inline-flex items-center gap-1.5 text-sm font-semibold text-brand-500 sm:text-base">
 				<Fire size={19} weight="fill" /> Summer Collection 2026
 			</p>
-			<h1 class="mx-auto mt-3 max-w-3xl text-[2rem] leading-[1.12] font-extrabold tracking-tight text-balance sm:text-5xl lg:text-[3.4rem]">
+			<h1 class="hero-enter mx-auto mt-3 max-w-3xl text-[2rem] leading-[1.12] font-extrabold tracking-tight text-balance sm:text-5xl lg:text-[3.4rem]" style="--hero-delay: 60ms">
 				Upgrade Your Style With Premium Essentials
 			</h1>
 		</div>
 
 		<div class="relative mt-8 grid items-center gap-8 lg:mt-4 lg:grid-cols-[minmax(0,240px)_1fr_minmax(0,240px)] lg:gap-4">
 			<div class="order-2 mx-auto max-w-md text-center lg:order-1 lg:mx-0 lg:max-w-none lg:text-left">
-				<p class="text-[15px] leading-relaxed text-ink-soft">
+				<p class="hero-enter text-[15px] leading-relaxed text-ink-soft" style="--hero-delay: 120ms">
 					Shop the latest arrivals with fast delivery and exclusive offers.
 				</p>
-				<div class="mt-6 flex flex-col items-center gap-3 lg:items-start">
+				<div class="hero-enter mt-6 flex flex-col items-center gap-3 lg:items-start" style="--hero-delay: 180ms">
 					<a
 						href="/shop"
 						class="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-500 px-6 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 transition-all hover:-translate-y-0.5 hover:bg-brand-600 sm:w-auto"
@@ -106,7 +122,7 @@
 				</div>
 			</div>
 
-			<div class="relative order-1 lg:order-2">
+			<div class="hero-enter relative order-1 lg:order-2" style="--hero-delay: 240ms">
 				<div aria-hidden="true" class="hero-glow absolute top-1/2 left-1/2 aspect-square w-[min(92%,560px)] -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"></div>
 				<img
 					src={heroProduct.image}
@@ -118,7 +134,7 @@
 				/>
 			</div>
 
-			<div class="order-3 mx-auto flex w-full max-w-sm flex-col gap-3 lg:mx-0 lg:max-w-none">
+			<div class="hero-enter order-3 mx-auto flex w-full max-w-sm flex-col gap-3 lg:mx-0 lg:max-w-none" style="--hero-delay: 300ms">
 				{#each [['15K+', 'Happy Customers'], ['5K+', 'Premium Products']] as [num, label]}
 					<div class="flex items-center gap-3 rounded-2xl bg-mist px-4 py-3">
 						<span class="flex h-11 w-14 shrink-0 items-center justify-center rounded-xl bg-brand-500 text-sm font-extrabold text-white">{num}</span>
@@ -131,7 +147,7 @@
 					</span>
 					<span class="text-sm font-medium">Customer Rating</span>
 				</div>
-				<p class="pt-1 text-center text-sm text-ink-soft lg:text-right">
+				<p class="hero-enter pt-1 text-center text-sm text-ink-soft lg:text-right" style="--hero-delay: 360ms">
 					Price: <a href="/product/{heroProduct.slug}" class="inline-flex min-h-11 items-center text-lg font-bold text-ink hover:text-brand-600">${heroProduct.price}.00</a>
 				</p>
 			</div>
@@ -196,17 +212,23 @@
 					loading="lazy"
 					width="2048"
 					height="1152"
-					class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+					class="absolute inset-0 h-full w-full object-cover object-left transition-transform duration-500 group-hover:scale-[1.04]"
 				/>
-				<span class="absolute top-1/2 right-0 -translate-y-1/2 p-6 text-right text-white drop-shadow-md sm:p-8">
-					<span class="text-lg font-bold sm:text-xl">{categories[1].name}</span>
-					<span class="mt-0.5 block text-sm text-white/85">{categories[1].tagline}</span>
+				<!-- Dark scrim behind the text: the title used to sit centred over the shoe with low contrast. -->
+				<span aria-hidden="true" class="absolute inset-0" style="background: linear-gradient(to top, rgb(0 0 0 / 0.62), rgb(0 0 0 / 0.25) 45%, transparent 70%)"></span>
+				<span class="absolute inset-x-0 bottom-0 p-5 pt-16 text-left text-white sm:p-6">
+					<span class="text-lg font-bold drop-shadow-md sm:text-xl">{categories[1].name}</span>
+					<span class="mt-0.5 block text-sm text-white/85 drop-shadow">{categories[1].tagline}</span>
+					<span class="mt-3 inline-flex items-center rounded-full bg-white px-4 py-2 text-[13px] font-semibold text-ink shadow-sm transition-colors group-hover:bg-brand-500 group-hover:text-white">
+						{categories[1].cta}
+					</span>
 				</span>
 			</a>
 		</Reveal>
 
 		{#each categories.slice(2) as cat, i}
-			<Reveal delay={120 + i * 60}>
+			<!-- At 2-col widths the last card spans both columns so no grid cell is left blank. -->
+			<Reveal delay={120 + i * 60} class={i === 1 ? 'sm:col-span-2 lg:col-span-1' : ''}>
 				<a
 					href="/categories"
 					class="group relative block h-full min-h-[220px] overflow-hidden rounded-3xl shadow-card transition-shadow hover:shadow-lift lg:min-h-[272px]"
@@ -246,7 +268,7 @@
 	<div class="mt-6 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:gap-5 lg:grid-cols-4">
 		{#each latest as product, i}
 			<Reveal delay={i * 70}>
-				<ProductCard {product} />
+				<ProductCard {product} morph />
 			</Reveal>
 		{/each}
 	</div>
@@ -269,7 +291,9 @@
 					<div class="mt-6 flex items-center gap-2 sm:gap-3" role="timer" aria-label="Deal ends in {cd.d} days, {cd.h} hours, {cd.m} minutes">
 						{#each countdown as [val, label]}
 							<div class="min-w-0 flex-1 rounded-2xl bg-white/10 px-1.5 py-2.5 text-center backdrop-blur sm:px-3">
-								<span class="block text-xl font-extrabold tabular-nums sm:text-2xl">{pad(val)}</span>
+								{#key val}
+									<span class="count-digit block text-xl font-extrabold tabular-nums sm:text-2xl">{pad(val)}</span>
+								{/key}
 								<span class="text-xs font-medium tracking-wide text-white/60 uppercase">{label}</span>
 							</div>
 						{/each}
@@ -316,6 +340,8 @@
 	</div>
 </section>
 
+<RecentlyViewed />
+
 <!-- ============ WHY SHOEMATE ============ -->
 <section class="pt-16">
 	<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -334,9 +360,16 @@
 </section>
 
 <!-- ============ TESTIMONIALS ============ -->
+<!-- Sample quotes: illustrative copy for this demo storefront, NOT real customer reviews. -->
 <section class="pt-16">
 	<Reveal>
-		<h2 class="text-xl font-extrabold tracking-tight uppercase sm:text-2xl">Loved by 15,000+ sneakerheads</h2>
+		<p class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-bold tracking-widest text-amber-800 uppercase">
+			Sample quotes — not real reviews
+		</p>
+		<h2 class="mt-3 text-xl font-extrabold tracking-tight uppercase sm:text-2xl">Loved by 15,000+ sneakerheads</h2>
+		<p class="mt-1 max-w-2xl text-sm leading-relaxed text-ink-soft">
+			These quotes are illustrative samples written for this demo storefront. There are no real customer reviews yet.
+		</p>
 	</Reveal>
 	<div class="mt-6 grid gap-4 md:grid-cols-3">
 		{#each testimonials as t, i}
@@ -364,27 +397,26 @@
 		<div class="rounded-[2rem] bg-brand-500 px-6 py-10 text-center text-white sm:px-10">
 			<h2 class="text-2xl font-extrabold text-balance sm:text-3xl">Get 10% off your first order</h2>
 			<p class="mx-auto mt-2 max-w-md text-[15px] text-white/85">Join the list for drops, restocks and members-only deals. One email a week, no spam.</p>
-			<form
-				class="mx-auto mt-6 flex max-w-md flex-col gap-2 sm:flex-row sm:rounded-full sm:bg-white sm:p-1.5"
-				onsubmit={(e) => {
-					e.preventDefault();
-					const input = e.currentTarget.querySelector('input');
-					if (input) input.value = '';
-					alert('Welcome to Shoemate! Your 10% code is on its way.');
-				}}
-			>
-				<label class="sr-only" for="newsletter-email">Email address</label>
-				<input
-					id="newsletter-email"
-					type="email"
-					required
-					placeholder="Email address"
-					class="h-12 w-full min-w-0 rounded-full bg-white px-5 text-base text-ink outline-none placeholder:text-ink-soft sm:w-auto sm:flex-1 sm:bg-transparent"
-				/>
-				<button type="submit" class="h-12 shrink-0 rounded-full bg-ink px-6 text-sm font-semibold text-white transition-colors hover:bg-ink/80 sm:hover:bg-brand-600">
-					Claim 10% off
-				</button>
-			</form>
+			{#if newsletterDone}
+				<p class="mx-auto mt-6 flex max-w-md items-center justify-center gap-2 rounded-full bg-white/15 px-4 py-3 text-sm font-medium">
+					<Check size={18} weight="bold" /> You are on the list. Your 10% code is on its way (demo).
+				</p>
+			{:else}
+				<form class="mx-auto mt-6 flex max-w-md flex-col gap-2 sm:flex-row sm:rounded-full sm:bg-white sm:p-1.5" onsubmit={subscribeNewsletter}>
+					<label class="sr-only" for="newsletter-email">Email address</label>
+					<input
+						id="newsletter-email"
+						type="email"
+						required
+						bind:value={newsletterEmail}
+						placeholder="Email address"
+						class="h-12 w-full min-w-0 rounded-full bg-white px-5 text-base text-ink outline-none placeholder:text-ink-soft sm:w-auto sm:flex-1 sm:bg-transparent"
+					/>
+					<button type="submit" class="h-12 shrink-0 rounded-full bg-ink px-6 text-sm font-semibold text-white transition-colors hover:bg-ink/80 sm:hover:bg-brand-600">
+						Claim 10% off
+					</button>
+				</form>
+			{/if}
 		</div>
 	</Reveal>
 </section>

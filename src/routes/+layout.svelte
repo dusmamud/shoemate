@@ -7,10 +7,15 @@
 	import '#lib/app.css';
 	import favicon from '#lib/assets/favicon.svg';
 	import CartDrawer from '#lib/components/CartDrawer.svelte';
+	import CookieNotice from '#lib/components/CookieNotice.svelte';
 	import Footer from '#lib/components/Footer.svelte';
 	import Header from '#lib/components/Header.svelte';
 	import SearchOverlay from '#lib/components/SearchOverlay.svelte';
+	import Toast from '#lib/components/Toast.svelte';
+	import { setupViewTransitions } from '#lib/transitions';
 	import type { LayoutProps } from './$types';
+
+	setupViewTransitions();
 
 	let { children }: LayoutProps = $props();
 </script>
@@ -43,3 +48,5 @@
 
 <CartDrawer />
 <SearchOverlay />
+<CookieNotice />
+<Toast />

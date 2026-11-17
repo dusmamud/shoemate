@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { ArrowRight, List, MagnifyingGlass, ShoppingBag, Sneaker, User, X } from 'phosphor-svelte';
-	import { cart, ui } from '#lib/store.svelte';
+	import { ArrowRight, Heart, List, MagnifyingGlass, ShoppingBag, Sneaker, User, X } from 'phosphor-svelte';
+	import { cart, ui, wishlist } from '#lib/store.svelte';
 
 	const links = [
 		{ href: '/', label: 'Home' },
@@ -73,11 +73,24 @@
 			</button>
 
 			<a
-				href="/signin"
+				href="/wishlist"
+				class="relative flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:bg-mist"
+				aria-label="Wishlist, {wishlist.slugs.length} items"
+			>
+				<Heart size={20} weight={wishlist.slugs.length ? 'fill' : 'regular'} class={wishlist.slugs.length ? 'text-brand-500' : ''} />
+				{#if wishlist.slugs.length}
+					<span class="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-500 px-1 text-xs font-bold text-white ring-2 ring-white">
+						{wishlist.slugs.length}
+					</span>
+				{/if}
+			</a>
+
+			<a
+				href="/account"
 				class="hidden h-11 items-center gap-1.5 rounded-full px-3 text-sm font-medium transition-colors hover:bg-mist sm:flex"
 			>
 				<User size={19} />
-				<span class="hidden md:inline">Sign in</span>
+				<span class="hidden md:inline">Account</span>
 			</a>
 
 			<button
@@ -88,9 +101,11 @@
 			>
 				<ShoppingBag size={20} weight="bold" />
 				{#if cart.count}
-					<span class="absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-500 px-1 text-xs font-bold text-white ring-2 ring-white">
-						{cart.count}
-					</span>
+					{#key cart.count}
+						<span class="cart-badge-bump absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-500 px-1 text-xs font-bold text-white ring-2 ring-white">
+							{cart.count}
+						</span>
+					{/key}
 				{/if}
 			</button>
 
@@ -136,6 +151,16 @@
 				</li>
 			{/each}
 			<li class="mt-2 border-t border-line pt-2">
+				<a href="/wishlist" class="flex min-h-12 items-center gap-2 rounded-xl px-3 text-[15px] font-medium hover:bg-mist">
+					<Heart size={19} /> Wishlist{#if wishlist.slugs.length} ({wishlist.slugs.length}){/if}
+				</a>
+			</li>
+			<li>
+				<a href="/account" class="flex min-h-12 items-center gap-2 rounded-xl px-3 text-[15px] font-medium hover:bg-mist">
+					<User size={19} /> Account
+				</a>
+			</li>
+			<li>
 				<a href="/signin" class="flex min-h-12 items-center gap-2 rounded-xl px-3 text-[15px] font-medium hover:bg-mist">
 					<User size={19} /> Sign in
 				</a>

@@ -2,14 +2,24 @@
 	import { fade, fly } from 'svelte/transition';
 	import { ArrowRight, Minus, Plus, ShoppingBag, Trash, Truck, X } from 'phosphor-svelte';
 	import { cart, ui } from '#lib/store.svelte';
+	import { focusTrap } from '#lib/focus-trap';
 	import { getProduct } from '#lib/data/products';
 
 	const FREE_SHIPPING_AT = 150;
 
 	let progress = $derived(Math.min(100, (cart.subtotal / FREE_SHIPPING_AT) * 100));
+	let lastTrigger: HTMLElement | null = null;
 
 	$effect(() => {
-		document.body.style.overflow = ui.cartOpen ? 'hidden' : '';
+		if (ui.cartOpen) {
+			lastTrigger = document.activeElement as HTMLElement | null;
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = '';
+			// Return focus to whatever opened the drawer (M-23).
+			lastTrigger?.focus?.();
+			lastTrigger = null;
+		}
 		return () => {
 			document.body.style.overflow = '';
 		};
@@ -35,6 +45,7 @@
 		role="dialog"
 		aria-labelledby="cart-drawer-title"
 		aria-modal="true"
+		use:focusTrap
 	>
 		<div class="flex items-center justify-between border-b border-line px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-4">
 			<h2 id="cart-drawer-title" class="flex items-center gap-2 text-lg font-bold">
@@ -93,11 +104,11 @@
 								</div>
 								<div class="mt-auto flex items-center justify-between pt-2">
 									<div class="flex items-center rounded-full border border-line">
-										<button type="button" onclick={() => cart.setQty(line.slug, line.size, line.qty - 1)} class="flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-brand-500" aria-label="Decrease quantity">
+										<button type="button" onclick={() => cart.setQty(line.slug, line.size, line.qty - 1)} disabled={line.qty <= 1} class="flex h-11 w-11 items-center justify-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-brand-500 disabled:cursor-not-allowed disabled:opacity-35" aria-label="Decrease quantity">
 											<Minus size={15} weight="bold" />
 										</button>
 										<span class="w-7 text-center text-sm font-semibold">{line.qty}</span>
-										<button type="button" onclick={() => cart.setQty(line.slug, line.size, line.qty + 1)} class="flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-brand-500" aria-label="Increase quantity">
+										<button type="button" onclick={() => cart.setQty(line.slug, line.size, line.qty + 1)} disabled={line.qty >= 9} class="flex h-11 w-11 items-center justify-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-brand-500 disabled:cursor-not-allowed disabled:opacity-35" aria-label="Increase quantity">
 											<Plus size={15} weight="bold" />
 										</button>
 									</div>

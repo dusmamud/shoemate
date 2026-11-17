@@ -58,7 +58,7 @@
 		{#if results.length}
 			<div class="mt-6 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:gap-5 lg:grid-cols-4">
 				{#each results as product}
-					<ProductCard {product} />
+					<ProductCard {product} morph />
 				{/each}
 			</div>
 		{:else}

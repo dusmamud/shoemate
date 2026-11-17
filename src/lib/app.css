@@ -64,6 +64,16 @@
 	button,
 	a {
 		touch-action: manipulation;
+		/* Smooth press feedback (F-12a): any transition-* utility overrides this. */
+		transition: transform 0.12s ease-out;
+	}
+	/* Press feedback (F-12a): every button/link shrinks slightly while held.
+	   Tailwind v4 hover lifts use the `translate`/`scale` properties, so this
+	   `transform` scale composes with them instead of fighting. `.no-press`
+	   opts an element out. */
+	button:not(.no-press):active,
+	a:not(.no-press):active {
+		transform: scale(0.97);
 	}
 	/* Visible keyboard focus everywhere (brand ring, 2px + offset). */
 	:focus-visible {
@@ -96,6 +106,26 @@
 	transform: translateY(0);
 }
 
+/* Hero entrance (F-10): load-only stagger, pure CSS keyframes — no JS arming,
+   so there is no SSR flash: the `from` state applies from first paint via
+   `both` fill, and the elements are visible by default if animations don't
+   run. Stagger via --hero-delay (60ms steps); 350ms per item, ~710ms total. */
+@keyframes hero-in {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+.hero-enter {
+	animation: hero-in 0.35s cubic-bezier(0.2, 0, 0, 1) both;
+	animation-delay: var(--hero-delay, 0ms);
+	will-change: opacity, transform;
+}
+
 /* Giant outlined year in the hero */
 .text-outline-year {
 	color: transparent;
@@ -121,18 +151,128 @@
 	border-radius: 999px;
 }
 
+/* Fly-to-cart dot (N-08): a 14px brand dot animated by the Web Animations
+   API from the Add button to the header cart. Positioned by JS (left/top),
+   the animation itself is transform + opacity only. */
+.fly-dot {
+	position: fixed;
+	z-index: 80;
+	width: 14px;
+	height: 14px;
+	border-radius: 9999px;
+	background: #ff6b1a;
+	box-shadow: 0 2px 10px rgb(255 107 26 / 0.55);
+	pointer-events: none;
+}
+
+/* Toast entrance (S-18): transform + opacity only. */
+@keyframes toast-in {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+.animate-toast-in {
+	animation: toast-in 0.25s ease-out;
+}
+
+/* Skeleton pulse (N-09): opacity only — no layout shift, no transform. */
+@keyframes skeleton-pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.55;
+	}
+}
+.skeleton-pulse {
+	animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+/* Countdown digit pop (F-11): the {#key} in +page.svelte remounts the digit
+   when its value changes, retriggering this 250ms pop. Opacity + transform only. */
+@keyframes count-pop {
+	from {
+		opacity: 0.35;
+		transform: translateY(4px) scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+.count-digit {
+	animation: count-pop 0.25s ease-out;
+}
+
+/* Cart-badge bump (F-12b / N-08): the {#key cart.count} in Header.svelte
+   remounts the badge when the count changes, retriggering this 300ms bump. */
+@keyframes badge-bump {
+	0% {
+		transform: scale(1);
+	}
+	40% {
+		transform: scale(1.35);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+.cart-badge-bump {
+	animation: badge-bump 0.3s ease-out;
+}
+
+/* Reusable step/section entrance: fade + rise, 450ms. No component is forced
+   onto it — add `animate-fade-up` where an entrance is wanted, optionally
+   with --fade-up-delay for stagger. Ends visible; reduced motion kills it. */
+@keyframes fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+.animate-fade-up {
+	animation: fade-up 0.45s cubic-bezier(0.2, 0, 0, 1) both;
+	animation-delay: var(--fade-up-delay, 0ms);
+}
+
 /* Motion: only animate when the user has not asked for less motion */
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;
 	}
 	.animate-float,
-	.animate-marquee {
+	.animate-marquee,
+	.animate-toast-in,
+	.skeleton-pulse,
+	.count-digit,
+	.cart-badge-bump,
+	.animate-fade-up {
 		animation: none !important;
 	}
 	.reveal {
 		opacity: 1 !important;
 		transform: none !important;
 		transition: none !important;
+	}
+	/* Hero entrance (F-10): no entrance animation under reduced motion. */
+	.hero-enter {
+		animation: none !important;
+		opacity: 1 !important;
+		transform: none !important;
+	}
+	/* Press feedback (F-12a): no press scaling under reduced motion. */
+	button:active,
+	a:active {
+		transform: none !important;
 	}
 }

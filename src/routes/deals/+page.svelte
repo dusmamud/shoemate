@@ -2,6 +2,7 @@
 	import { Fire, Tag } from 'phosphor-svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import Reveal from '#lib/components/Reveal.svelte';
+	import { toast } from '#lib/toast.svelte';
 	import { products } from '#lib/data/products';
 
 	const deals = products.filter((p) => p.oldPrice).sort((a, b) => b.oldPrice! - b.price - (a.oldPrice! - a.price));
@@ -11,6 +12,7 @@
 	function copyCode() {
 		navigator.clipboard?.writeText('SHOEMATE10').catch(() => {});
 		copied = true;
+		toast.success('Code SHOEMATE10 copied to clipboard');
 		setTimeout(() => (copied = false), 1500);
 	}
 </script>
@@ -52,7 +54,7 @@
 	<div class="mt-5 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
 		{#each deals as product, i}
 			<Reveal delay={Math.min(i, 5) * 50}>
-				<ProductCard {product} />
+				<ProductCard {product} morph />
 			</Reveal>
 		{/each}
 	</div>

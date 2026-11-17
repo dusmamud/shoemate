@@ -51,9 +51,9 @@
 								</div>
 								<div class="mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-2 pt-3">
 									<div class="flex items-center rounded-full border border-line">
-										<button type="button" onclick={() => cart.setQty(line.slug, line.size, line.qty - 1)} class="flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-brand-500" aria-label="Decrease quantity"><Minus size={15} weight="bold" /></button>
+										<button type="button" onclick={() => cart.setQty(line.slug, line.size, line.qty - 1)} disabled={line.qty <= 1} class="flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-brand-500 disabled:cursor-not-allowed disabled:opacity-40" aria-label="Decrease quantity"><Minus size={15} weight="bold" /></button>
 										<span class="w-7 text-center text-sm font-bold">{line.qty}</span>
-										<button type="button" onclick={() => cart.setQty(line.slug, line.size, line.qty + 1)} class="flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-brand-500" aria-label="Increase quantity"><Plus size={15} weight="bold" /></button>
+										<button type="button" onclick={() => cart.setQty(line.slug, line.size, line.qty + 1)} disabled={line.qty >= 9} class="flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-brand-500 disabled:cursor-not-allowed disabled:opacity-40" aria-label="Increase quantity"><Plus size={15} weight="bold" /></button>
 									</div>
 									<span class="ml-auto font-extrabold">${p.price * line.qty}</span>
 								</div>

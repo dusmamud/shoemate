@@ -88,6 +88,9 @@
 		<Reveal>
 			<h2 class="text-2xl font-extrabold">Visit a store</h2>
 			<p class="mt-1 text-[15px] text-ink-soft">Try them on, talk to a real sneakerhead, walk out wearing them.</p>
+			<p class="mt-2 inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-bold tracking-widest text-amber-800 uppercase">
+				Demo locations — illustrative, not real stores
+			</p>
 		</Reveal>
 		<div class="mt-6 grid gap-4 md:grid-cols-3">
 			{#each stores as store, i}
@@ -96,6 +99,7 @@
 						<p class="flex items-center gap-2 font-bold"><MapPin size={19} class="text-brand-500" /> {store.city}</p>
 						<p class="mt-2 text-sm text-ink-soft">{store.address}</p>
 						<p class="mt-1 text-sm text-ink-soft">{store.hours}</p>
+						<p class="mt-2 text-xs font-semibold text-amber-800">Demo location — not a real store address.</p>
 						<a href="/shop" class="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-full py-2 text-sm font-semibold text-brand-600 hover:text-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">
 							Shop this city’s picks <ArrowRight size={15} weight="bold" />
 						</a>

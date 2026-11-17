@@ -1,19 +1,39 @@
 <script lang="ts">
-	import { ArrowRight, Check, Envelope, FacebookLogo, InstagramLogo, MapPin, Phone, Sneaker, XLogo, YoutubeLogo } from 'phosphor-svelte';
+	import { browser } from '$app/env';
+	import { ArrowRight, Check, Envelope, FacebookLogo, InstagramLogo, Sneaker, XLogo, YoutubeLogo } from 'phosphor-svelte';
 
 	let email = $state('');
 	let subscribed = $state(false);
+	let currency = $state('USD');
+
+	$effect(() => {
+		if (!browser) return;
+		try {
+			currency = localStorage.getItem('shoemate:currency') ?? 'USD';
+		} catch {
+			// Display-only preference; ignore storage failures.
+		}
+	});
 
 	function subscribe(e: SubmitEvent) {
 		e.preventDefault();
 		if (!email.includes('@')) return;
 		subscribed = true;
 	}
+
+	function setCurrency(e: Event) {
+		currency = (e.currentTarget as HTMLSelectElement).value;
+		try {
+			localStorage.setItem('shoemate:currency', currency);
+		} catch {
+			// Display-only preference; ignore storage failures.
+		}
+	}
 </script>
 
 <footer class="mt-20 bg-ink text-white">
 	<div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-		<div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.4fr]">
+		<div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.4fr]">
 			<div class="min-w-0">
 				<a href="/" class="flex items-center gap-2" aria-label="Shoemate home">
 					<span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500 text-white">
@@ -27,16 +47,16 @@
 					Premium sneakers, honest prices and fast delivery. Upgrade your style with essentials that go the distance.
 				</p>
 				<div class="mt-5 flex gap-2">
-					<a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-brand-500">
+					<a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-brand-500">
 						<InstagramLogo size={19} />
 					</a>
-					<a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-brand-500">
+					<a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-brand-500">
 						<FacebookLogo size={19} />
 					</a>
-					<a href="https://x.com" target="_blank" rel="noreferrer" aria-label="X" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-brand-500">
+					<a href="https://x.com" target="_blank" rel="noreferrer" aria-label="X" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-brand-500">
 						<XLogo size={19} />
 					</a>
-					<a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-brand-500">
+					<a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-brand-500">
 						<YoutubeLogo size={19} />
 					</a>
 				</div>
@@ -49,7 +69,26 @@
 					<li><a href="/new-arrivals" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">New Arrivals</a></li>
 					<li><a href="/deals" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Deals &amp; Offers</a></li>
 					<li><a href="/categories" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Categories</a></li>
+					<li><a href="/drops" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Drop Calendar</a></li>
+					<li><a href="/gift-cards" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Gift Cards</a></li>
+					<li><a href="/blog" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">The Run Down</a></li>
 					<li><a href="/cart" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Your Cart</a></li>
+					<li><a href="/wishlist" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Wishlist</a></li>
+				</ul>
+			</nav>
+
+			<nav aria-label="Help" class="min-w-0">
+				<h3 class="text-sm font-bold tracking-widest text-white/40 uppercase">Help</h3>
+				<ul class="mt-3 space-y-1 text-sm">
+					<li><a href="/help" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Help Centre</a></li>
+					<li><a href="/shipping" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Shipping</a></li>
+					<li><a href="/returns" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Returns</a></li>
+					<li><a href="/size-guide" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Size Guide</a></li>
+					<li><a href="/fit-finder" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Fit Finder</a></li>
+					<li><a href="/track" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Track Order</a></li>
+					<li><a href="/accessibility" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Accessibility</a></li>
+					<li><a href="/privacy" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Privacy Policy</a></li>
+					<li><a href="/terms" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Terms</a></li>
 				</ul>
 			</nav>
 
@@ -59,6 +98,8 @@
 					<li><a href="/about" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">About Us</a></li>
 					<li><a href="/about#story" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Our Story</a></li>
 					<li><a href="/about#stores" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Stores</a></li>
+					<li><a href="/account" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Account</a></li>
+					<li><a href="/rewards" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Rewards</a></li>
 					<li><a href="/signin" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Sign In</a></li>
 				</ul>
 			</nav>
@@ -87,10 +128,28 @@
 					</form>
 				{/if}
 				<ul class="mt-5 space-y-2 text-sm text-white/60">
-					<li class="flex items-center gap-2"><Envelope size={16} /> hello@shoemate.store</li>
-					<li class="flex items-center gap-2"><Phone size={16} /> +1 (555) 014-8890</li>
-					<li class="flex items-center gap-2"><MapPin size={16} /> 214 Runner Street, Portland, OR</li>
+					<li class="flex items-center gap-2">
+						<Envelope size={16} />
+						<a href="mailto:support@shoemate.example" class="hover:text-white">support@shoemate.example</a>
+					</li>
+					<li class="text-[13px] text-white/40">Demo storefront — this email is a placeholder, not a live inbox.</li>
 				</ul>
+				<div class="mt-5">
+					<label for="footer-currency" class="text-sm font-bold tracking-widest text-white/40 uppercase">Currency</label>
+					<select
+						id="footer-currency"
+						bind:value={currency}
+						onchange={setCurrency}
+						class="mt-2 flex h-11 w-full max-w-56 items-center rounded-full bg-white/10 px-4 text-base text-white outline-none focus:ring-2 focus:ring-brand-500 [&>option]:text-ink"
+					>
+						<option value="USD">USD — US Dollar</option>
+						<option value="INR">INR — Indian Rupee</option>
+						<option value="GBP">GBP — British Pound</option>
+					</select>
+					<p class="mt-2 text-[13px] leading-relaxed text-white/40">
+						Display only for now — prices are shown in USD until multi-currency pricing launches.
+					</p>
+				</div>
 			</div>
 		</div>
 
