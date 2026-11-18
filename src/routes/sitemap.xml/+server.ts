@@ -12,11 +12,6 @@ const staticRoutes = [
 	'/new-arrivals',
 	'/deals',
 	'/about',
-	'/cart',
-	'/checkout',
-	'/search',
-	'/signin',
-	'/forgot-password',
 	'/help',
 	'/shipping',
 	'/returns',
@@ -28,13 +23,8 @@ const staticRoutes = [
 	'/fit-finder',
 	'/accessibility',
 	'/wishlist',
-	'/account',
-	'/account/orders',
-	'/account/addresses',
 	'/gift-cards',
-	'/rewards',
-	'/track',
-	'/compare'
+	'/rewards'
 ];
 
 export function GET() {

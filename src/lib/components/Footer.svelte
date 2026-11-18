@@ -72,8 +72,10 @@
 					<li><a href="/drops" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Drop Calendar</a></li>
 					<li><a href="/gift-cards" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Gift Cards</a></li>
 					<li><a href="/blog" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">The Run Down</a></li>
+					<li><a href="/blog/" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Blog</a></li>
 					<li><a href="/cart" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Your Cart</a></li>
 					<li><a href="/wishlist" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Wishlist</a></li>
+					<li><a href="/compare/" class="flex min-h-11 items-center text-white/70 transition-colors hover:text-white">Compare</a></li>
 				</ul>
 			</nav>
 

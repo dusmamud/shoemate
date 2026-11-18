@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import { ArrowRight, Check, Sparkle, Star } from 'phosphor-svelte';
 	import { getRewards } from '#lib/store.svelte';
 
@@ -28,9 +31,13 @@
 </script>
 
 <svelte:head>
-	<title>Rewards — Shoemate</title>
-	<meta name="description" content="Shoemate Rewards — earn points on every order and climb from Bronze to Gold. Demo programme, stored locally in this browser." />
+	<Seo
+		title="Rewards — Shoemate"
+		description="Shoemate Rewards — earn points on every order and climb from Bronze to Gold. Demo programme, stored locally in this browser."
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Rewards' }])} />
 
 <section class="pt-8">
 	<h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Shoemate Rewards</h1>

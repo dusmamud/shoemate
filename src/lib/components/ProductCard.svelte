@@ -3,6 +3,7 @@
 	import { cart, wishlist } from '#lib/store.svelte';
 	import { compare, COMPARE_MAX } from '#lib/compare.svelte';
 	import { toast } from '#lib/toast.svelte';
+	import { responsiveImage } from '#lib/images';
 	import type { Product } from '#lib/data/products';
 
 	let { product, morph = false }: { product: Product; morph?: boolean } = $props();
@@ -68,7 +69,9 @@
 >
 	<a href="/product/{product.slug}" class="relative block overflow-hidden bg-mist" aria-label={product.name}>
 		<img
-			src={product.image}
+			src={responsiveImage(product.image).src}
+			srcset={responsiveImage(product.image).srcset}
+			sizes="(max-width: 399px) 100vw, (max-width: 1023px) 50vw, 301px"
 			alt={product.name}
 			loading="lazy"
 			width="800"

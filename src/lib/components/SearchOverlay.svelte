@@ -5,6 +5,7 @@
 	import { ui } from '#lib/store.svelte';
 	import { focusTrap } from '#lib/focus-trap';
 	import Skeleton from '#lib/components/Skeleton.svelte';
+	import { responsiveImage } from '#lib/images';
 
 	let q = $state('');
 	let input: HTMLInputElement | undefined = $state();
@@ -116,7 +117,7 @@
 									onclick={() => (ui.searchOpen = false)}
 									class="flex items-center gap-4 rounded-2xl px-2 py-3 transition-colors hover:bg-mist"
 								>
-									<img src={p.image} alt="" class="h-14 w-14 shrink-0 rounded-xl bg-mist object-cover" width="112" height="112" />
+									<img src={responsiveImage(p.image).src} srcset={responsiveImage(p.image).srcset} sizes="56px" alt="" class="h-14 w-14 shrink-0 rounded-xl bg-mist object-cover" width="112" height="112" />
 									<span class="min-w-0 flex-1">
 										<span class="block truncate text-[15px] font-semibold">{p.name}</span>
 										<span class="text-xs text-ink-soft">{p.brand} · {p.category}</span>

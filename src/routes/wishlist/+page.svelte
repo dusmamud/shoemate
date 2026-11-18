@@ -1,7 +1,11 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import { ArrowRight, Check, Heart, ShoppingBag, Trash } from 'phosphor-svelte';
 	import { cart, wishlist } from '#lib/store.svelte';
 	import { getProduct, SIZES, type Product } from '#lib/data/products';
+	import { responsiveImage } from '#lib/images';
 
 	let movedName = $state('');
 	// One size choice per saved item. The default is the FIRST IN-STOCK size
@@ -46,9 +50,13 @@
 </script>
 
 <svelte:head>
-	<title>Wishlist — Shoemate</title>
-	<meta name="description" content="Your saved sneakers on Shoemate — stock and price at a glance, ready to move to your cart." />
+	<Seo
+		title="Wishlist — Shoemate"
+		description="Your saved sneakers on Shoemate — stock and price at a glance, ready to move to your cart."
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Wishlist' }])} />
 
 <section class="pt-8">
 	<h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Wishlist</h1>
@@ -68,7 +76,7 @@
 				{@const stock = stockLabel(p)}
 				<li class="flex flex-col gap-4 rounded-3xl bg-white p-4 shadow-card sm:flex-row sm:items-center sm:gap-5 sm:p-5">
 					<a href="/product/{p.slug}" class="h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-mist sm:h-28 sm:w-28">
-						<img src={p.image} alt={p.name} class="h-full w-full object-cover" width="224" height="224" loading="lazy" />
+						<img src={responsiveImage(p.image).src} srcset={responsiveImage(p.image).srcset} sizes="(max-width: 639px) 96px, 112px" alt={p.name} class="h-full w-full object-cover" width="224" height="224" loading="lazy" />
 					</a>
 					<div class="min-w-0 flex-1">
 						<a href="/product/{p.slug}" class="text-lg font-bold hover:text-brand-600">{p.name}</a>

@@ -1,7 +1,11 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import { ArrowRight, Minus, Plus, ShieldCheck, ShoppingBag, Trash, Truck } from 'phosphor-svelte';
 	import { cart } from '#lib/store.svelte';
 	import { getProduct } from '#lib/data/products';
+	import { responsiveImage } from '#lib/images';
 
 	let promo = $state('');
 	let promoApplied = $state(false);
@@ -22,8 +26,14 @@
 </script>
 
 <svelte:head>
-	<title>Your Cart — Shoemate</title>
+	<Seo
+		title="Your Cart — Shoemate"
+		description="Your Shoemate cart — review your sneakers, update quantities and check out securely."
+		noindex
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Cart' }])} />
 
 <section class="pt-8">
 	<h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Your Cart</h1>
@@ -37,7 +47,7 @@
 					{#if p}
 						<li class="flex gap-4 py-5">
 							<a href="/product/{p.slug}" class="h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-mist sm:h-28 sm:w-28">
-								<img src={p.image} alt={p.name} class="h-full w-full object-cover" width="224" height="224" />
+								<img src={responsiveImage(p.image).src} srcset={responsiveImage(p.image).srcset} sizes="(max-width: 639px) 96px, 112px" alt={p.name} class="h-full w-full object-cover" width="224" height="224" />
 							</a>
 							<div class="flex min-w-0 flex-1 flex-col">
 								<div class="flex items-start justify-between gap-3">

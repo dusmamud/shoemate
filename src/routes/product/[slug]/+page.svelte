@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { browser } from '$app/env';
@@ -26,6 +27,9 @@
 		X
 	} from 'phosphor-svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
+	import { jpegSrc, responsiveImage } from '#lib/images';
 	import RecentlyViewed from '#lib/components/RecentlyViewed.svelte';
 	import Reveal from '#lib/components/Reveal.svelte';
 	import { focusTrap } from '#lib/focus-trap';
@@ -422,7 +426,17 @@
 					name: product.name,
 					brand: { '@type': 'Brand', name: product.brand },
 					description: product.description,
-					image: `https://shoemate.pages.dev${product.image}`,
+					// All gallery angles as 1200px JPEGs (scrapers / JSON-LD
+					// consumers handle JPG reliably; never WebP here).
+					image: product.images.map((img) => `https://shoemate.pages.dev${jpegSrc(img)}`),
+					// Internal merchant identifier, derived from the slug —
+					// not an invented gtin/mpn.
+					sku: `SM-${product.slug.toUpperCase()}`,
+					category: product.category,
+					// aggregateRating KEPT AS-IS (Dus, 2026-11-18: "abhi maat
+					// hatana"). The 4.9 / 2,314 numbers are demo data, not real
+					// user reviews — the policy risk stays a documented open
+					// item; do not remove or change this block.
 					aggregateRating: {
 						'@type': 'AggregateRating',
 						ratingValue: product.rating,
@@ -430,11 +444,16 @@
 					},
 					offers: {
 						'@type': 'Offer',
-						url: `https://shoemate.pages.dev/product/${product.slug}`,
+						url: `https://shoemate.pages.dev/product/${product.slug}/`,
 						priceCurrency: 'USD',
 						price: product.price,
 						availability:
-							product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
+							product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+						// @id references only — the full policies live on
+						// their own pages (/returns/#policy, /shipping/#details)
+						// and say exactly what is claimed here.
+						hasMerchantReturnPolicy: { '@id': 'https://shoemate.pages.dev/returns/#policy' },
+						shippingDetails: { '@id': 'https://shoemate.pages.dev/shipping/#details' }
 					}
 				}
 			: null
@@ -442,31 +461,43 @@
 </script>
 
 <svelte:head>
-	{#if product}
-		<title>{product.name} — ${product.price} · Shoemate</title>
-		<meta name="description" content="{product.name} by {product.brand}. {product.blurb} Free shipping over $150 at Shoemate." />
-		<meta property="og:type" content="product" />
-		<meta property="og:title" content="{product.name} — ${product.price} · Shoemate" />
-		<meta property="og:description" content="{product.name} by {product.brand}. {product.blurb}" />
-		<meta property="og:image" content="https://shoemate.pages.dev{product.image}" />
-		<meta property="og:url" content="https://shoemate.pages.dev/product/{product.slug}" />
-		<meta property="product:price:amount" content={String(product.price)} />
-		<meta property="product:price:currency" content="USD" />
-		<meta
-			property="product:availability"
-			content={product.stock > 0 ? 'in stock' : 'out of stock'}
-		/>
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="{product.name} — ${product.price} · Shoemate" />
-		<meta name="twitter:description" content="{product.name} by {product.brand}. {product.blurb}" />
-		<meta name="twitter:image" content="https://shoemate.pages.dev{product.image}" />
-		{#if jsonLd}
+	<!-- Single unconditional <Seo>: the head must NOT contain an {#if} block
+	     wrapping a component. That shape mis-accounts Svelte 5's head
+	     hydration cursor — first it crashed the page (Illegal invocation,
+	     2026-11-18), then, with the metas moved into Seo, hydration
+	     overshot and deleted the page's <link rel="stylesheet"> nodes,
+	     unstyling the PDP and blowing the gallery to its 1600px intrinsic
+	     width (document overflow 1234px @390). The not-found case is
+	     handled with ternaries + noindex instead of a branch. -->
+	<Seo
+		title={product
+			? `${product.name} — $${product.price} · Shoemate`
+			: 'Product not found — Shoemate'}
+		description={product
+			? `${product.name} by ${product.brand}. ${product.blurb} Free shipping over $150 at Shoemate.`
+			: 'This product is no longer available at Shoemate — browse the latest sneakers instead.'}
+		ogType="product"
+		ogImage={product
+			? product.image.replace('/images/', '/images/og-').replace('.png', '.jpg')
+			: undefined}
+		productPrice={product?.price}
+		productAvailability={product && product.stock > 0 ? 'in stock' : 'out of stock'}
+		noindex={!product}
+	/>
+</svelte:head>
+
+{#if product}
+{#if jsonLd}
 			{@html `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`}
 		{/if}
-	{:else}
-		<title>Product not found — Shoemate</title>
-	{/if}
-</svelte:head>
+<JsonLd
+			data={breadcrumbList([
+				{ name: 'Home', href: '/' },
+				{ name: 'Shop', href: '/shop/' },
+				{ name: product.name }
+			])}
+		/>
+{/if}
 
 {#if product}
 	<section class="pt-6">
@@ -493,7 +524,9 @@
 								class="block w-full shrink-0 snap-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
 							>
 								<img
-									src={src}
+									src={responsiveImage(src).src}
+									srcset={responsiveImage(src).srcset}
+									sizes="(max-width: 1023px) 100vw, 600px"
 									alt="{product.name} — view {i + 1} of {galleryImages.length}"
 									width="1600"
 									height="1600"
@@ -542,7 +575,7 @@
 								? 'border-ink'
 								: 'border-transparent opacity-70 hover:opacity-100'}"
 						>
-							<img src={src} alt="" width="160" height="160" class="h-full w-full object-cover" loading="lazy" />
+							<img src={responsiveImage(src).src} srcset={responsiveImage(src).srcset} sizes="80px" alt="" width="160" height="160" class="h-full w-full object-cover" loading="lazy" />
 						</button>
 					{/each}
 				</div>
@@ -1242,7 +1275,9 @@
 				>
 					<img
 						bind:this={zoomImg}
-						src={galleryImages[activeImage]}
+						src={responsiveImage(galleryImages[activeImage]).src}
+						srcset={responsiveImage(galleryImages[activeImage]).srcset}
+						sizes="(max-width: 1023px) 100vw, 896px"
 						alt="{product.name} — view {activeImage + 1} of {galleryImages.length}"
 						width="1600"
 						height="1600"
@@ -1269,7 +1304,7 @@
 						aria-current={activeImage === i}
 						class="h-16 w-16 overflow-hidden rounded-xl border-2 {activeImage === i ? 'border-white' : 'border-transparent opacity-60 hover:opacity-100'}"
 					>
-						<img src={src} alt="" width="128" height="128" class="h-full w-full object-cover" />
+						<img src={responsiveImage(src).src} srcset={responsiveImage(src).srcset} sizes="64px" alt="" width="128" height="128" class="h-full w-full object-cover" />
 					</button>
 				{/each}
 			</div>

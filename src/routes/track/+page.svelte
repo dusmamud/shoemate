@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { Check, MagnifyingGlass, Package, Truck } from 'phosphor-svelte';
@@ -29,9 +32,14 @@
 </script>
 
 <svelte:head>
-	<title>Track Your Order — Shoemate</title>
-	<meta name="description" content="Track your Shoemate order by its SM- number — demo tracking stored locally in this browser." />
+	<Seo
+		title="Track Your Order — Shoemate"
+		description="Track your Shoemate order by its SM- number — demo tracking stored locally in this browser."
+		noindex
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Track Order' }])} />
 
 <section class="pt-8">
 	<h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Track your order</h1>

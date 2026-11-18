@@ -1,14 +1,42 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import Reveal from '#lib/components/Reveal.svelte';
+
+	// OfferShippingDetails — standard delivery only, every claim verbatim
+	// from this page: US only; "2–4 business days. Free on orders over
+	// $150, otherwise $9"; "placed before 2pm ship the same working day"
+	// / "packed within 24 hours" (handling 0–1 days). The $14 express
+	// 1–2-day option is NOT claimed here — one deliveryTime per policy.
+	const shippingDetails = {
+		'@context': 'https://schema.org',
+		'@type': 'OfferShippingDetails',
+		'@id': 'https://shoemate.pages.dev/shipping/#details',
+		shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'US' },
+		shippingRate: {
+			'@type': 'ShippingRateSettings',
+			shippingRate: { '@type': 'MonetaryAmount', value: 9, currency: 'USD' },
+			freeShippingThreshold: { '@type': 'MonetaryAmount', value: 150, currency: 'USD' }
+		},
+		deliveryTime: {
+			'@type': 'ShippingDeliveryTime',
+			handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 1, unitCode: 'DAY' },
+			transitTime: { '@type': 'QuantitativeValue', minValue: 2, maxValue: 4, unitCode: 'DAY' }
+		}
+	};
+
 </script>
 
 <svelte:head>
-	<title>Shipping — Shoemate</title>
-	<meta
-		name="description"
-		content="Shoemate shipping: free standard delivery over $150, express 1–2 days, and what to expect after you order."
+	<Seo
+		title="Shipping — Shoemate"
+		description="Shoemate shipping: free standard delivery over $150, express 1–2 days, and what to expect after you order."
 	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Shipping' }])} />
+<JsonLd data={shippingDetails} />
 
 <section class="pt-8">
 	<Reveal>

@@ -1,14 +1,18 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import Reveal from '#lib/components/Reveal.svelte';
 </script>
 
 <svelte:head>
-	<title>Terms of Service — Shoemate</title>
-	<meta
-		name="description"
-		content="Shoemate terms: this is a demo storefront — no real orders, payments or deliveries yet."
+	<Seo
+		title="Terms of Service — Shoemate"
+		description="Shoemate terms: this is a demo storefront — no real orders, payments or deliveries yet."
 	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Terms' }])} />
 
 <section class="pt-8">
 	<Reveal>

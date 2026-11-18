@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { ArrowLeft, ArrowRight, Package, Repeat, ShoppingBag } from 'phosphor-svelte';
@@ -6,6 +9,7 @@
 	import OrderTimeline from '#lib/components/OrderTimeline.svelte';
 	import { cart, orders, type Order } from '#lib/store.svelte';
 	import { getProduct } from '#lib/data/products';
+	import { responsiveImage } from '#lib/images';
 	import { toast } from '#lib/toast.svelte';
 
 	// Detail view is a query param (?id=SM-…) on this same prerendered page:
@@ -64,9 +68,14 @@
 </script>
 
 <svelte:head>
-	<title>{detail ? `Order ${detail.id} — Shoemate` : 'Orders — Shoemate'}</title>
-	<meta name="description" content="Your Shoemate orders — status, items and totals, stored locally in this browser (demo)." />
+	<Seo
+		title={detail ? `Order ${detail.id} — Shoemate` : 'Orders — Shoemate'}
+		description="Your Shoemate orders — status, items and totals, stored locally in this browser (demo)."
+		noindex
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Account', href: '/account/' }, { name: 'Orders' }])} />
 
 <section class="pt-8">
 	{#if detailId}
@@ -90,7 +99,7 @@
 								<li class="flex items-center gap-3">
 									{#if p}
 										<a href="/product/{p.slug}" class="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-mist">
-											<img src={p.image} alt={p.name} class="h-full w-full object-cover" width="128" height="128" loading="lazy" />
+											<img src={responsiveImage(p.image).src} srcset={responsiveImage(p.image).srcset} sizes="64px" alt={p.name} class="h-full w-full object-cover" width="128" height="128" loading="lazy" />
 										</a>
 									{/if}
 									<span class="min-w-0 flex-1 text-sm">

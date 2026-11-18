@@ -1,10 +1,14 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import type { Component } from 'svelte';
 	import { ArrowRight, ArrowCounterClockwise, Check, Fire, Headset, ShieldCheck, Sneaker, Star, Truck } from 'phosphor-svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import RecentlyViewed from '#lib/components/RecentlyViewed.svelte';
 	import Reveal from '#lib/components/Reveal.svelte';
 	import { categories, heroProduct, products } from '#lib/data/products';
+	import { responsiveImage } from '#lib/images';
 
 	const latest = products.slice(0, 4);
 	const bestsellers = [...products].sort((a, b) => b.reviews - a.reviews).slice(0, 4);
@@ -54,6 +58,7 @@
 		s: Math.floor((diff / 1000) % 60)
 	});
 	const pad = (n: number) => String(n).padStart(2, '0');
+	const heroImg = responsiveImage(heroProduct.image);
 	const features: [Component, string, string][] = [
 		[Truck, 'Free fast shipping', 'Free delivery on orders over $150, tracked door to door.'],
 		[ShieldCheck, 'Secure checkout', 'Encrypted payments with all major cards and wallets.'],
@@ -81,8 +86,13 @@
 </script>
 
 <svelte:head>
-	<title>Shoemate — Upgrade Your Style With Premium Essentials</title>
+	<Seo
+		title="Shoemate — Upgrade Your Style With Premium Essentials"
+		description="Shop the latest premium sneakers with fast delivery and exclusive offers. New arrivals, bestsellers and limited drops — only at Shoemate."
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }])} />
 
 <!-- ============ HERO ============ -->
 <!-- Hero sits directly on the white sheet — no separate card (the reference has none). -->
@@ -125,7 +135,9 @@
 			<div class="hero-enter relative order-1 lg:order-2" style="--hero-delay: 240ms">
 				<div aria-hidden="true" class="hero-glow absolute top-1/2 left-1/2 aspect-square w-[min(92%,560px)] -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"></div>
 				<img
-					src={heroProduct.image}
+					src={heroImg.src}
+					srcset={heroImg.srcset}
+					sizes="(max-width: 1023px) 100vw, 560px"
 					alt="Velocity Runner X1 — white and grey sneaker with a bright orange sole"
 					width="1422"
 					height="1011"
@@ -180,7 +192,9 @@
 				style="background: {categories[0].bg}"
 			>
 				<img
-					src={categories[0].image}
+					src={responsiveImage(categories[0].image).src}
+					srcset={responsiveImage(categories[0].image).srcset}
+					sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 430px"
 					alt={categories[0].name}
 					loading="lazy"
 					width="1344"
@@ -207,7 +221,9 @@
 				style="background: {categories[1].bg}"
 			>
 				<img
-					src={categories[1].image}
+					src={responsiveImage(categories[1].image).src}
+					srcset={responsiveImage(categories[1].image).srcset}
+					sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 840px"
 					alt={categories[1].name}
 					loading="lazy"
 					width="2048"
@@ -235,7 +251,9 @@
 					style="background: {cat.bg}"
 				>
 					<img
-						src={cat.image}
+						src={responsiveImage(cat.image).src}
+						srcset={responsiveImage(cat.image).srcset}
+						sizes="(max-width: 1023px) 100vw, 430px"
 						alt={cat.name}
 						loading="lazy"
 						width="1600"
@@ -307,7 +325,9 @@
 				</div>
 				<div class="relative mx-auto hidden w-full max-w-sm lg:block">
 					<img
-						src="/images/prod-jordan.png"
+						src={responsiveImage('/images/prod-jordan.png').src}
+						srcset={responsiveImage('/images/prod-jordan.png').srcset}
+						sizes="384px"
 						alt="Air Jordan 1 Mid — white and red high-top sneaker"
 						loading="lazy"
 						width="1600"

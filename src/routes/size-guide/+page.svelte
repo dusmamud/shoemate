@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import Reveal from '#lib/components/Reveal.svelte';
 	import { SIZE_TABLE } from '#lib/data/products';
 
@@ -6,12 +9,13 @@
 </script>
 
 <svelte:head>
-	<title>Size Guide — Shoemate</title>
-	<meta
-		name="description"
-		content="Shoemate size guide: UK, EU and US conversion table plus how to measure your foot at home."
+	<Seo
+		title="Size Guide — Shoemate"
+		description="Shoemate size guide: UK, EU and US conversion table plus how to measure your foot at home."
 	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Size Guide' }])} />
 
 <section class="pt-8">
 	<Reveal>

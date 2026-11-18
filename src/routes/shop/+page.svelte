@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList, collectionPage } from '#lib/jsonld';
 	import { browser } from '$app/env';
 	import { page } from '$app/state';
 	import { CaretDown, MagnifyingGlass, SlidersHorizontal, X } from 'phosphor-svelte';
@@ -175,9 +178,21 @@
 </script>
 
 <svelte:head>
-	<title>Shop All Sneakers — Shoemate</title>
-	<meta name="description" content="Browse all premium sneakers at Shoemate. Filter by brand, category, size and price." />
+	<Seo
+		title="Shop All Sneakers — Shoemate"
+		description="Browse all premium sneakers at Shoemate. Filter by brand, category, size and price."
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Shop' }])} />
+<!-- ItemList = the products in the prerendered (unfiltered) list. -->
+<JsonLd
+		data={collectionPage(
+			'Shop All Sneakers',
+			'/shop/',
+			products.map((p) => ({ name: p.name, href: `/product/${p.slug}/` }))
+		)}
+	/>
 
 <section class="pt-8">
 	<Reveal>

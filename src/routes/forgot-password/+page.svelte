@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import { ArrowLeft, Check, EnvelopeSimple, Key } from 'phosphor-svelte';
 
 	let email = $state('');
@@ -17,9 +20,14 @@
 </script>
 
 <svelte:head>
-	<title>Forgot Password — Shoemate</title>
-	<meta name="description" content="Reset your Shoemate demo account password — accounts are demo-only and live in this browser." />
+	<Seo
+		title="Forgot Password — Shoemate"
+		description="Reset your Shoemate demo account password — accounts are demo-only and live in this browser."
+		noindex
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Forgot Password' }])} />
 
 <section class="mx-auto max-w-md pt-10 sm:pt-16">
 	<div class="rounded-[2rem] bg-white p-6 shadow-card sm:p-8">

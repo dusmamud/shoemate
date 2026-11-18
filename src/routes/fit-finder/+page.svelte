@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import Reveal from '#lib/components/Reveal.svelte';
 	import { SIZE_TABLE } from '#lib/data/products';
 
@@ -46,12 +49,13 @@
 </script>
 
 <svelte:head>
-	<title>Fit Finder — Shoemate</title>
-	<meta
-		name="description"
-		content="Find your shoe size in three questions: foot length, usual size and fit preference. A guide, not a guarantee."
+	<Seo
+		title="Fit Finder — Shoemate"
+		description="Find your shoe size in three questions: foot length, usual size and fit preference. A guide, not a guarantee."
 	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Fit Finder' }])} />
 
 <section class="pt-8">
 	<Reveal>

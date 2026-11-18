@@ -1,14 +1,18 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import Reveal from '#lib/components/Reveal.svelte';
 </script>
 
 <svelte:head>
-	<title>Privacy Policy — Shoemate</title>
-	<meta
-		name="description"
-		content="Shoemate privacy policy: what this demo store stores (localStorage only, no tracking yet) and what it never collects."
+	<Seo
+		title="Privacy Policy — Shoemate"
+		description="Shoemate privacy policy: what this demo store stores (localStorage only, no tracking yet) and what it never collects."
 	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Privacy Policy' }])} />
 
 <section class="pt-8">
 	<Reveal>

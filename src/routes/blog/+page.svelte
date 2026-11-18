@@ -1,6 +1,10 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList, collectionPage } from '#lib/jsonld';
 	import Reveal from '#lib/components/Reveal.svelte';
 	import { blogPosts } from '#lib/data/content';
+	import { responsiveImage } from '#lib/images';
 
 	function fmt(date: string) {
 		return new Date(date + 'T12:00:00').toLocaleDateString('en-GB', {
@@ -12,12 +16,20 @@
 </script>
 
 <svelte:head>
-	<title>The Run Down — Shoemate Blog</title>
-	<meta
-		name="description"
-		content="The Run Down: practical guides on sneaker care, fit and culture from Shoemate."
+	<Seo
+		title="The Run Down — Shoemate Blog"
+		description="The Run Down: practical guides on sneaker care, fit and culture from Shoemate."
 	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Blog' }])} />
+<JsonLd
+		data={collectionPage(
+			'The Run Down',
+			'/blog/',
+			blogPosts.map((p) => ({ name: p.title, href: `/blog/${p.slug}/` }))
+		)}
+	/>
 
 <section class="pt-8">
 	<Reveal>
@@ -35,7 +47,7 @@
 		{#each blogPosts as post, i}
 			<Reveal delay={i * 70}>
 				<a href="/blog/{post.slug}" class="group flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-card transition-shadow hover:shadow-lift">
-					<img src={post.image} alt={post.imageAlt} loading="lazy" width="1600" height="1600" class="aspect-[4/3] w-full object-cover" />
+					<img src={responsiveImage(post.image).src} srcset={responsiveImage(post.image).srcset} sizes="(max-width: 767px) 100vw, 400px" alt={post.imageAlt} loading="lazy" width="1600" height="1600" class="aspect-[4/3] w-full object-cover" />
 					<div class="flex flex-1 flex-col p-5">
 						<p class="text-xs font-semibold text-ink-soft">{fmt(post.date)} · {post.readMinutes} min read</p>
 						<h2 class="mt-2 font-bold group-hover:text-brand-600">{post.title}</h2>

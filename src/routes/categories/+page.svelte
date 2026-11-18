@@ -1,15 +1,33 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList, collectionPage } from '#lib/jsonld';
 	import { ArrowRight } from 'phosphor-svelte';
 	import Reveal from '#lib/components/Reveal.svelte';
 	import { categories, products } from '#lib/data/products';
+	import { responsiveImage } from '#lib/images';
 
 	const brands = [...new Set(products.map((p) => p.brand))].sort();
 </script>
 
 <svelte:head>
-	<title>Categories — Shoemate</title>
-	<meta name="description" content="Browse sneaker categories at Shoemate: premium sneakers, top picks, bestsellers and fresh drops." />
+	<Seo
+		title="Categories — Shoemate"
+		description="Browse sneaker categories at Shoemate: premium sneakers, top picks, bestsellers and fresh drops."
+		ogImage="/images/og-cat-premium.jpg"
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Categories' }])} />
+<!-- ItemList = the four category cards rendered on this page; each links
+	     to its filtered Shop view. -->
+<JsonLd
+		data={collectionPage(
+			'Categories',
+			'/categories/',
+			categories.map((c) => ({ name: c.name, href: `/shop?collection=${c.slug}` }))
+		)}
+	/>
 
 <section class="pt-8">
 	<Reveal>
@@ -29,7 +47,9 @@
 					style="background: {cat.bg}"
 				>
 					<img
-						src={cat.image}
+						src={responsiveImage(cat.image).src}
+						srcset={responsiveImage(cat.image).srcset}
+						sizes="(max-width: 639px) 100vw, 640px"
 						alt={cat.name}
 						loading="lazy"
 						width="1600"

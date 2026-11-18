@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList, collectionPage } from '#lib/jsonld';
 	import { error } from '@sveltejs/kit';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import Reveal from '#lib/components/Reveal.svelte';
@@ -12,9 +15,27 @@
 </script>
 
 <svelte:head>
-	<title>{brand} Sneakers — Shoemate</title>
-	<meta name="description" content="Shop {brand} sneakers at Shoemate. {brandBlurbs[brand] ?? ''}" />
+	<Seo
+		title={`${brand} Sneakers — Shoemate`}
+		description={`Shop ${brand} sneakers at Shoemate. ${brandBlurbs[brand] ?? ''}`}
+		ogImage={items[0] ? items[0].image.replace('/images/', '/images/og-').replace('.png', '.jpg') : undefined}
+	/>
 </svelte:head>
+
+<JsonLd
+		data={breadcrumbList([
+			{ name: 'Home', href: '/' },
+			{ name: 'Shop', href: '/shop/' },
+			{ name: brand }
+		])}
+	/>
+<JsonLd
+		data={collectionPage(
+			`${brand} Sneakers`,
+			`/brand/${brandSlug(brand)}/`,
+			items.map((p) => ({ name: p.name, href: `/product/${p.slug}/` }))
+		)}
+	/>
 
 <section class="pt-8">
 	<Reveal>

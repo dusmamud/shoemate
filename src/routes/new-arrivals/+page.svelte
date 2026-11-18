@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import ProductCard from '#lib/components/ProductCard.svelte';
 	import Reveal from '#lib/components/Reveal.svelte';
 	import { products } from '#lib/data/products';
@@ -8,9 +11,13 @@
 </script>
 
 <svelte:head>
-	<title>New Arrivals — Shoemate</title>
-	<meta name="description" content="The freshest sneaker drops at Shoemate. New arrivals, updated weekly." />
+	<Seo
+		title="New Arrivals — Shoemate"
+		description="The freshest sneaker drops at Shoemate. New arrivals, updated weekly."
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'New Arrivals' }])} />
 
 <section class="pt-8">
 	<Reveal>

@@ -1,8 +1,12 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import { ArrowRight, Scales, Trash, X } from 'phosphor-svelte';
 	import { compare, COMPARE_MAX } from '#lib/compare.svelte';
 	import { getProduct } from '#lib/data/products';
 	import { getSpecs } from '#lib/data/specs';
+	import { responsiveImage } from '#lib/images';
 	import { toast } from '#lib/toast.svelte';
 
 	let items = $derived(compare.slugs.map((slug) => getProduct(slug)).filter((p) => p !== undefined));
@@ -19,9 +23,14 @@
 </script>
 
 <svelte:head>
-	<title>Compare Sneakers — Shoemate</title>
-	<meta name="description" content="Compare up to 3 sneakers side by side: price, rating, weight, drop, materials and cushioning." />
+	<Seo
+		title="Compare Sneakers — Shoemate"
+		description="Compare up to 3 sneakers side by side: price, rating, weight, drop, materials and cushioning."
+		noindex
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Compare' }])} />
 
 <section class="pt-8">
 	<p class="text-sm font-semibold tracking-widest text-brand-500 uppercase">Compare</p>
@@ -50,7 +59,7 @@
 						{#each items as p (p.slug)}
 							<th scope="col" class="min-w-44 p-4 sm:p-5">
 								<a href="/product/{p.slug}" class="group block">
-									<img src={p.image} alt={p.name} loading="lazy" width="400" height="400" class="aspect-square w-full rounded-2xl bg-mist object-cover" />
+									<img src={responsiveImage(p.image).src} srcset={responsiveImage(p.image).srcset} sizes="(max-width: 639px) 176px, 400px" alt={p.name} loading="lazy" width="400" height="400" class="aspect-square w-full rounded-2xl bg-mist object-cover" />
 									<span class="mt-2 block text-[15px] leading-snug font-bold group-hover:text-brand-600">{p.name}</span>
 									<span class="text-xs font-medium text-ink-soft">{p.brand} · {p.category}</span>
 								</a>

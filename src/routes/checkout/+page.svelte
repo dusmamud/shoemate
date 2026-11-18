@@ -1,7 +1,11 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import { ArrowLeft, ArrowRight, Check, CreditCard, Lock, ShieldCheck, Truck, User } from 'phosphor-svelte';
 	import { cart, buildTimeline } from '#lib/store.svelte';
 	import { getProduct } from '#lib/data/products';
+	import { responsiveImage } from '#lib/images';
 	import { toast } from '#lib/toast.svelte';
 
 	// ---- Step state (S-09): Details → Payment → Review, one page at a time.
@@ -283,8 +287,14 @@
 </script>
 
 <svelte:head>
-	<title>Checkout — Shoemate</title>
+	<Seo
+		title="Checkout — Shoemate"
+		description="Complete your Shoemate order — delivery details, payment and confirmation."
+		noindex
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Checkout' }])} />
 
 <section class="pt-8">
 	{#if orderNo}
@@ -511,7 +521,7 @@
 						{@const p = getProduct(line.slug)}
 						{#if p}
 							<li class="flex items-center gap-3 text-sm">
-								<img src={p.image} alt="" class="h-12 w-12 shrink-0 rounded-xl bg-mist object-cover" width="96" height="96" />
+								<img src={responsiveImage(p.image).src} srcset={responsiveImage(p.image).srcset} sizes="48px" alt="" class="h-12 w-12 shrink-0 rounded-xl bg-mist object-cover" width="96" height="96" />
 								<span class="min-w-0 flex-1">
 									<span class="block truncate font-semibold">{p.name}</span>
 									<span class="text-xs text-ink-soft">{line.size} × {line.qty}</span>

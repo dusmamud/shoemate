@@ -1,7 +1,11 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import { Bell, Check } from 'phosphor-svelte';
 	import Reveal from '#lib/components/Reveal.svelte';
 	import { drops } from '#lib/data/content';
+	import { responsiveImage } from '#lib/images';
 
 	let email = $state('');
 	let subscribed = $state(false);
@@ -31,12 +35,14 @@
 </script>
 
 <svelte:head>
-	<title>Drop Calendar — Shoemate</title>
-	<meta
-		name="description"
-		content="Upcoming Shoemate drops and launch dates — restocks and new colourways, with demo email alerts."
+	<Seo
+		title="Drop Calendar — Shoemate"
+		description="Upcoming Shoemate drops and launch dates — restocks and new colourways, with demo email alerts."
+		ogImage="/images/og-cat-drops.jpg"
 	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Drops' }])} />
 
 <section class="pt-8">
 	<Reveal>
@@ -54,7 +60,7 @@
 		{#each drops as drop, i}
 			<Reveal delay={i * 60}>
 				<article class="flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-card">
-					<img src={drop.image} alt={drop.name} loading="lazy" width="1600" height="1600" class="aspect-square w-full object-cover" />
+					<img src={responsiveImage(drop.image).src} srcset={responsiveImage(drop.image).srcset} sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 400px" alt={drop.name} loading="lazy" width="1600" height="1600" class="aspect-square w-full object-cover" />
 					<div class="flex flex-1 flex-col p-5">
 						<p class="text-xs font-bold tracking-widest text-brand-500 uppercase">{fmt(drop.date)} · {drop.brand}</p>
 						<h2 class="mt-2 font-bold">{drop.name}</h2>

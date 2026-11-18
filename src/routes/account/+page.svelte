@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
 	import { Check, Gift, Heart, MapPin, Package, SignOut, Sparkle } from 'phosphor-svelte';
@@ -48,9 +51,14 @@
 </script>
 
 <svelte:head>
-	<title>My Account — Shoemate</title>
-	<meta name="description" content="Your Shoemate account — orders, addresses, rewards and wishlist, all stored locally in this browser (demo)." />
+	<Seo
+		title="My Account — Shoemate"
+		description="Your Shoemate account — orders, addresses, rewards and wishlist, all stored locally in this browser (demo)."
+		noindex
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Account' }])} />
 
 <section class="pt-8">
 	<h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">

@@ -23,10 +23,6 @@
 <svelte:head>
 	<link rel="icon" href={favicon} />
 	<title>Shoemate — Premium Sneakers, Fast Delivery</title>
-	<meta
-		name="description"
-		content="Shop the latest premium sneakers with fast delivery and exclusive offers. New arrivals, bestsellers and limited drops — only at Shoemate."
-	/>
 	<meta name="theme-color" content="#ff6b1a" />
 </svelte:head>
 

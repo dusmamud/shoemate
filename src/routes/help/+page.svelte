@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import Reveal from '#lib/components/Reveal.svelte';
 
 	const groups: { title: string; note: string; faqs: { q: string; a: string }[] }[] = [
@@ -114,12 +117,13 @@
 </script>
 
 <svelte:head>
-	<title>Help Centre — Shoemate</title>
-	<meta
-		name="description"
-		content="Answers on fit, sizing, shipping, returns, promo codes and orders — the Shoemate help centre."
+	<Seo
+		title="Help Centre — Shoemate"
+		description="Answers on fit, sizing, shipping, returns, promo codes and orders — the Shoemate help centre."
 	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Help Centre' }])} />
 
 <section class="pt-8">
 	<Reveal>

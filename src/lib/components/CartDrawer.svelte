@@ -4,6 +4,7 @@
 	import { cart, ui } from '#lib/store.svelte';
 	import { focusTrap } from '#lib/focus-trap';
 	import { getProduct } from '#lib/data/products';
+	import { responsiveImage } from '#lib/images';
 
 	const FREE_SHIPPING_AT = 150;
 
@@ -83,7 +84,7 @@
 					{#if p}
 						<li class="flex gap-3 py-4">
 							<a href="/product/{p.slug}" onclick={() => (ui.cartOpen = false)} class="h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-mist focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500">
-								<img src={p.image} alt={p.name} class="h-full w-full object-cover" width="160" height="160" />
+								<img src={responsiveImage(p.image).src} srcset={responsiveImage(p.image).srcset} sizes="80px" alt={p.name} class="h-full w-full object-cover" width="160" height="160" />
 							</a>
 							<div class="flex min-w-0 flex-1 flex-col">
 								<div class="flex items-start justify-between gap-2">

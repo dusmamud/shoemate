@@ -1,14 +1,36 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import Reveal from '#lib/components/Reveal.svelte';
+
+	// MerchantReturnPolicy — every claim below is verbatim from this page:
+	// "30 days from delivery … for a full refund. Returns are free."
+	// Return is by mail with the returns label (step 3–4: pack with the
+	// returns label, drop it off). No term here is invented.
+	const returnPolicy = {
+		'@context': 'https://schema.org',
+		'@type': 'MerchantReturnPolicy',
+		'@id': 'https://shoemate.pages.dev/returns/#policy',
+		applicableCountry: 'US',
+		returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+		merchantReturnDays: 30,
+		returnMethod: 'https://schema.org/ReturnByMail',
+		returnFees: 'https://schema.org/FreeReturn',
+		refundType: 'https://schema.org/FullRefund'
+	};
+
 </script>
 
 <svelte:head>
-	<title>Returns &amp; Exchanges — Shoemate</title>
-	<meta
-		name="description"
-		content="Shoemate returns: 30 days, free, unworn shoes in the original box. How to start a return and when your refund arrives."
+	<Seo
+		title="Returns &amp; Exchanges — Shoemate"
+		description="Shoemate returns: 30 days, free, unworn shoes in the original box. How to start a return and when your refund arrives."
 	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Returns' }])} />
+<JsonLd data={returnPolicy} />
 
 <section class="pt-8">
 	<Reveal>

@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import { page } from '$app/state';
 	import { MagnifyingGlass, X } from 'phosphor-svelte';
 	import ProductCard from '#lib/components/ProductCard.svelte';
@@ -13,8 +16,14 @@
 </script>
 
 <svelte:head>
-	<title>{q ? `Search: ${q}` : 'Search'} — Shoemate</title>
+	<Seo
+		title={q ? `Search: ${q} — Shoemate` : 'Search — Shoemate'}
+		description="Search premium sneakers at Shoemate — find your pair by brand, style or size."
+		noindex
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Search' }])} />
 
 <section class="pt-8">
 	<p class="text-sm font-semibold tracking-widest text-brand-500 uppercase">Search</p>

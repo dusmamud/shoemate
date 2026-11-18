@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import { Check, Copy, Gift } from 'phosphor-svelte';
 	import { giftcards, type GiftCard } from '#lib/store.svelte';
 
@@ -56,9 +59,13 @@
 </script>
 
 <svelte:head>
-	<title>Gift Cards — Shoemate</title>
-	<meta name="description" content="Send a Shoemate e-gift card — demo only, no payment is taken and codes work in this browser until the backend arrives." />
+	<Seo
+		title="Gift Cards — Shoemate"
+		description="Send a Shoemate e-gift card — demo only, no payment is taken and codes work in this browser until the backend arrives."
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Gift Cards' }])} />
 
 <section class="pt-8">
 	<h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Gift cards</h1>

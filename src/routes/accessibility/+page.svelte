@@ -1,14 +1,18 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import Reveal from '#lib/components/Reveal.svelte';
 </script>
 
 <svelte:head>
-	<title>Accessibility — Shoemate</title>
-	<meta
-		name="description"
-		content="Shoemate accessibility statement: keyboard support, focus states, reduced motion and how to report a barrier."
+	<Seo
+		title="Accessibility — Shoemate"
+		description="Shoemate accessibility statement: keyboard support, focus states, reduced motion and how to report a barrier."
 	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'Accessibility' }])} />
 
 <section class="pt-8">
 	<Reveal>

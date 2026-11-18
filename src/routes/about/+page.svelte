@@ -1,7 +1,11 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
+	import JsonLd from '#lib/components/JsonLd.svelte';
+	import { breadcrumbList } from '#lib/jsonld';
 	import type { Component } from 'svelte';
 	import { ArrowRight, MapPin, ShieldCheck, Sneaker, Star, Truck } from 'phosphor-svelte';
 	import Reveal from '#lib/components/Reveal.svelte';
+	import { responsiveImage } from '#lib/images';
 
 	const values: [Component, string, string][] = [
 		[Sneaker, 'Authentic, always', 'Every pair is sourced directly from brands and authorised distributors — and verified before dispatch.'],
@@ -24,9 +28,14 @@
 </script>
 
 <svelte:head>
-	<title>About Shoemate — Our Story</title>
-	<meta name="description" content="Shoemate started with one belief: great sneakers should be easy to buy. Read our story." />
+	<Seo
+		title="About Shoemate — Our Story"
+		description="Shoemate started with one belief: great sneakers should be easy to buy. Read our story."
+		ogImage="/images/og-about-story.jpg"
+	/>
 </svelte:head>
+
+<JsonLd data={breadcrumbList([{ name: 'Home', href: '/' }, { name: 'About' }])} />
 
 <section class="pt-8">
 	<Reveal>
@@ -39,7 +48,9 @@
 	<div id="story" class="mt-8 grid items-center gap-8 lg:grid-cols-2">
 		<Reveal>
 			<img
-				src="/images/about-story.png"
+				src={responsiveImage('/images/about-story.png').src}
+				srcset={responsiveImage('/images/about-story.png').srcset}
+				sizes="(max-width: 1023px) 100vw, 640px"
 				alt="Inside a Shoemate store — shelves of colourful sneakers"
 				loading="lazy"
 				width="2048"
